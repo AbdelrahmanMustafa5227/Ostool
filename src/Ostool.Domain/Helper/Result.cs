@@ -11,7 +11,7 @@ namespace Ostool.Domain.Helper
     {
         public bool IsSuccess { get; set; }
         public bool IsFailed => !IsSuccess;
-        public Error? Error { get; set; } 
+        public Error? Error { get; set; }
 
         public Result(bool isSuccess, Error? errors)
         {
@@ -39,6 +39,6 @@ namespace Ostool.Domain.Helper
 
         public T Value => IsSuccess ? _value! : throw new InvalidOperationException()!;
 
-        public static implicit operator Result<T> (T value) => Create(value);
+        public static implicit operator Result<T>(T value) => Create(value);
     }
 }

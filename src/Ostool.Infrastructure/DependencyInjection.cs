@@ -14,7 +14,7 @@ namespace Ostool.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services , IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(cfg => cfg.UseSqlServer(configuration.GetConnectionString("Default")));
             services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<AppDbContext>());

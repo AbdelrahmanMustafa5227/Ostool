@@ -10,6 +10,6 @@ namespace Ostool.Application.Abstractions.Repositories
     public interface IVendorRepository
     {
         void Add(Vendor vendor);
-        void Update (Vendor vendor);
+        void Update(Vendor vendor);
     }
 }

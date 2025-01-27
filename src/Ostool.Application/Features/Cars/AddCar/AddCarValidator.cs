@@ -9,8 +9,8 @@ namespace Ostool.Application.Features.Cars.AddCar
 {
     internal class AddCarValidator : AbstractValidator<AddCarCommand>
     {
-        public AddCarValidator() 
-        { 
+        public AddCarValidator()
+        {
             RuleFor(x => x.Year)
                 .NotEmpty()
                 .LessThanOrEqualTo(DateTime.Now.Year)
@@ -25,7 +25,7 @@ namespace Ostool.Application.Features.Cars.AddCar
 
             RuleFor(x => x.Brand)
                 .NotEmpty();
-                
+
         }
     }
 }
