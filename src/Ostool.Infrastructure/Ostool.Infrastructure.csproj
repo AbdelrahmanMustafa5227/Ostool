@@ -12,4 +12,8 @@
     <ProjectReference Include="..\Ostool.Application\Ostool.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

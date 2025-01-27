@@ -24,14 +24,11 @@ namespace Ostool.Infrastructure.Migrations
 
             modelBuilder.Entity("Ostool.Domain.Entities.Advertisement", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CarId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CarId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasMaxLength(200)
@@ -55,16 +52,13 @@ namespace Ostool.Infrastructure.Migrations
 
                     b.HasIndex("VendorId");
 
-                    b.ToTable("Advertisement");
+                    b.ToTable("Advertisements");
                 });
 
             modelBuilder.Entity("Ostool.Domain.Entities.Car", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("AvgPrice")
                         .HasColumnType("decimal(18,2)");
@@ -85,13 +79,13 @@ namespace Ostool.Infrastructure.Migrations
                     b.HasIndex("Model")
                         .IsUnique();
 
-                    b.ToTable("Car");
+                    b.ToTable("Cars");
                 });
 
             modelBuilder.Entity("Ostool.Domain.Entities.CarSpecs", b =>
                 {
-                    b.Property<int>("CarId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CarId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("BodyStyle")
                         .HasColumnType("int");
@@ -152,7 +146,6 @@ namespace Ostool.Infrastructure.Migrations
             modelBuilder.Entity("Ostool.Domain.Entities.Vendor", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ContactNumber")
@@ -174,7 +167,7 @@ namespace Ostool.Infrastructure.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Vendor");
+                    b.ToTable("Vendors");
                 });
 
             modelBuilder.Entity("Ostool.Domain.Entities.Advertisement", b =>

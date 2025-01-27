@@ -8,7 +8,7 @@ namespace Ostool.Domain.Entities
 {
     public class Advertisement
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Description { get; private set; } = string.Empty;
         public decimal Price { get; private set; }
         public DateTime PostedDate { get; private set; }
@@ -18,6 +18,6 @@ namespace Ostool.Domain.Entities
         public Guid VendorId { get; set; }
 
         public Car Car { get; set; } = new();
-        public int CarId { get; set; }
+        public Guid CarId { get; set; }
     }
 }

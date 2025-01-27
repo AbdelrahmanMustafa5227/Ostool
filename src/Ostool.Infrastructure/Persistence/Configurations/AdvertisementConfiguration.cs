@@ -14,6 +14,7 @@ namespace Ostool.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Advertisement> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder
                 .Property(x => x.Description)

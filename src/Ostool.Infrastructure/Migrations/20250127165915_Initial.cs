@@ -6,17 +6,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Ostool.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Car",
+                name: "Cars",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Brand = table.Column<string>(type: "varchar(50)", nullable: false),
                     Model = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
@@ -24,11 +23,11 @@ namespace Ostool.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Car", x => x.Id);
+                    table.PrimaryKey("PK_Cars", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vendor",
+                name: "Vendors",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -38,14 +37,14 @@ namespace Ostool.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vendor", x => x.Id);
+                    table.PrimaryKey("PK_Vendors", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CarSpecs",
                 columns: table => new
                 {
-                    CarId = table.Column<int>(type: "int", nullable: false),
+                    CarId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BodyStyle = table.Column<int>(type: "int", nullable: false),
                     Length = table.Column<double>(type: "float", nullable: false),
                     Width = table.Column<double>(type: "float", nullable: false),
@@ -68,62 +67,61 @@ namespace Ostool.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_CarSpecs", x => x.CarId);
                     table.ForeignKey(
-                        name: "FK_CarSpecs_Car_CarId",
+                        name: "FK_CarSpecs_Cars_CarId",
                         column: x => x.CarId,
-                        principalTable: "Car",
+                        principalTable: "Cars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Advertisement",
+                name: "Advertisements",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PostedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     VendorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CarId = table.Column<int>(type: "int", nullable: false)
+                    CarId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Advertisement", x => x.Id);
+                    table.PrimaryKey("PK_Advertisements", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Advertisement_Car_CarId",
+                        name: "FK_Advertisements_Cars_CarId",
                         column: x => x.CarId,
-                        principalTable: "Car",
+                        principalTable: "Cars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Advertisement_Vendor_VendorId",
+                        name: "FK_Advertisements_Vendors_VendorId",
                         column: x => x.VendorId,
-                        principalTable: "Vendor",
+                        principalTable: "Vendors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Advertisement_CarId",
-                table: "Advertisement",
+                name: "IX_Advertisements_CarId",
+                table: "Advertisements",
                 column: "CarId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Advertisement_VendorId",
-                table: "Advertisement",
+                name: "IX_Advertisements_VendorId",
+                table: "Advertisements",
                 column: "VendorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Car_Model",
-                table: "Car",
+                name: "IX_Cars_Model",
+                table: "Cars",
                 column: "Model",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vendor_Email",
-                table: "Vendor",
+                name: "IX_Vendors_Email",
+                table: "Vendors",
                 column: "Email",
                 unique: true);
         }
@@ -132,16 +130,16 @@ namespace Ostool.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Advertisement");
+                name: "Advertisements");
 
             migrationBuilder.DropTable(
                 name: "CarSpecs");
 
             migrationBuilder.DropTable(
-                name: "Vendor");
+                name: "Vendors");
 
             migrationBuilder.DropTable(
-                name: "Car");
+                name: "Cars");
         }
     }
 }

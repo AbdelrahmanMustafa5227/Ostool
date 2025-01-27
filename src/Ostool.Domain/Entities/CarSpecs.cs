@@ -39,6 +39,6 @@ namespace Ostool.Domain.Entities
 
 
         public Car Car { get; set; } = new();
-        public int CarId { get; set; }
+        public Guid CarId { get; set; }
     }
 }

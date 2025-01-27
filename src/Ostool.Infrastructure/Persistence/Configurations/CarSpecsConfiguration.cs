@@ -15,6 +15,7 @@ namespace Ostool.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<CarSpecs> builder)
         {
             builder.HasKey(c => c.CarId);
+            builder.Property(x => x.CarId).ValueGeneratedNever();
 
             builder
                 .Property(x => x.EngineType)
