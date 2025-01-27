@@ -32,7 +32,7 @@ jobs:
         run: dotnet test --configuration Release --no-build
 
       - name: Publish
-        run: dotnet publish Ostool/Ostool.Api.csproj --configuration Release -o artifacts
+        run: dotnet publish Ostool/src/Ostool.Api/Ostool.Api.csproj --configuration Release -o artifacts
 
       - uses: actions/upload-artifact@v4
         with:
