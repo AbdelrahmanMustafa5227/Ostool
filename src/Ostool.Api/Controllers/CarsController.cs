@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ostool.Application.Features.Cars.AddCar;
+using Ostool.Application.Features.Cars.UpdateCar;
 
 namespace Ostool.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CarsController : ControllerBase
+    public class CarsController : ApiController
     {
         private readonly ISender _mediator;
 
@@ -15,12 +16,21 @@ namespace Ostool.Api.Controllers
         {
             _mediator = mediator;
         }
+
         [HttpPost]
         public async Task<IActionResult> Get(AddCarCommand command)
         {
             var result = await _mediator.Send(command);
 
-            return result.IsSuccess ? Ok("Done") : BadRequest(result.Error);
+            return result.IsSuccess ? Ok("Done") : Problem(result.Error!);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Get(UpdateCarCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            return result.IsSuccess ? Ok("Done") : Problem(result.Error!);
         }
     }
 }

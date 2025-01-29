@@ -1,5 +1,8 @@
+using Microsoft.Extensions.Hosting;
+using Ostool.Api.Middlewares;
 using Ostool.Application;
 using Ostool.Infrastructure;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +12,18 @@ builder.Services.AddOpenApi();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
-builder.Services.AddProblemDetails();
+builder.Services.AddProblemDetails(cfg =>
+{
+    cfg.CustomizeProblemDetails = context =>
+    {
+        context.ProblemDetails.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
+    };
+});
+
+builder.Host.UseSerilog((context, cfg) =>
+{
+    cfg.ReadFrom.Configuration(context.Configuration);
+});
 
 var app = builder.Build();
 
@@ -20,7 +34,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

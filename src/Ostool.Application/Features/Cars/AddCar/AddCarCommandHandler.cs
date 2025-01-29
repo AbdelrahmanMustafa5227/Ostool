@@ -1,7 +1,8 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Ostool.Application.Abstractions.Repositories;
+using Ostool.Application.Helpers;
 using Ostool.Domain.Entities;
-using Ostool.Domain.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,33 +17,21 @@ namespace Ostool.Application.Features.Cars.AddCar
     {
         private readonly ICarRepository _carRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<AddCarCommandHandler> _logger;
 
-        public AddCarCommandHandler(ICarRepository carRepository, IUnitOfWork unitOfWork)
+        public AddCarCommandHandler(ICarRepository carRepository, IUnitOfWork unitOfWork, ILogger<AddCarCommandHandler> logger)
         {
             _carRepository = carRepository;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<Result> Handle(AddCarCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                _carRepository.Add(new Car
-                {
-                    Id = Guid.NewGuid(),
-                    Model = request.Model,
-                    Brand = request.Brand,
-                    AvgPrice = request.AvgPrice,
-                    Year = request.Year
-                });
-                await _unitOfWork.SaveChangesAsync();
-                return Result.Success();
-            }
-            catch (Exception ex)
-            {
-                return Result.Failure(new Error(ex.Message + "\n" + ex.InnerException?.Message));
-            }
-
+            _carRepository.Add(request.ToModel());
+            await _unitOfWork.SaveChangesAsync();
+            _logger.LogInformation("Successfully Added {0}", request.Brand + " " + request.Model);
+            return Result.Success();
         }
     }
 }
