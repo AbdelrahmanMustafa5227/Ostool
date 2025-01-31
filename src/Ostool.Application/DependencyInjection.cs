@@ -20,10 +20,12 @@ namespace Ostool.Application
                 cfg.AddOpenBehavior(typeof(PerformanceBehavior<,>));
                 cfg.AddOpenBehavior(typeof(LoggingBehaviour<,>));
                 cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+                cfg.AddOpenBehavior(typeof(CachingBehaviour<,>));
 
             });
 
             services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, includeInternalTypes: true);
+            services.AddMemoryCache();
             return services;
         }
     }

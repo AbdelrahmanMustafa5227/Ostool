@@ -11,5 +11,9 @@
     <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Serilog.Sinks.Console" />
   </ItemGroup>
+	
+  <ItemGroup>
+	  <InternalsVisibleTo Include="UnitTests"/>
+  </ItemGroup>
 
 </Project>

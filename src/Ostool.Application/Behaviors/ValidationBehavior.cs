@@ -29,7 +29,7 @@ namespace Ostool.Application.Behaviors
         {
             if (!_validators.Any())
             {
-                await next();
+                return await next();
             }
 
             var context = new ValidationContext<TRequest>(request);

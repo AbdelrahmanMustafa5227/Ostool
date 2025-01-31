@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ostool.Application.Abstractions.Repositories;
+using Ostool.Infrastructure.Idempotency;
 using Ostool.Infrastructure.Persistence;
 using Ostool.Infrastructure.Persistence.Repositories;
 using System;
@@ -23,6 +24,7 @@ namespace Ostool.Infrastructure
             services.AddScoped<ICarSpecsRepository, CarSpecsRepository>();
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
+            services.AddScoped<IdempotencyService>();
             return services;
         }
     }

@@ -11,11 +11,6 @@ namespace Ostool.Application.Features.Cars.AddCar
     {
         public AddCarValidator()
         {
-            RuleFor(x => x.Year)
-                .NotEmpty()
-                .LessThanOrEqualTo(DateTime.Now.Year)
-                .GreaterThan(1990);
-
             RuleFor(x => x.Model)
                 .NotEmpty();
 

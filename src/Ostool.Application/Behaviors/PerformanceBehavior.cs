@@ -27,7 +27,7 @@ namespace Ostool.Application.Behaviors
             var response = await next();
             stopWatch.Stop();
 
-            _logger.LogInformation("{0} Request Took {1} Milliseconds", request.GetType().Name, stopWatch.ElapsedMilliseconds);
+            _logger.LogInformation("{0} Request Took {1} Milliseconds \n -------", request.GetType().Name, stopWatch.ElapsedMilliseconds);
             return response;
         }
     }

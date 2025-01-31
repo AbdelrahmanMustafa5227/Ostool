@@ -20,6 +20,18 @@ builder.Services.AddProblemDetails(cfg =>
     };
 });
 
+builder.Services.AddCors(cfg =>
+{
+    cfg.AddPolicy("MyPolicy", policyBuilder =>
+    {
+        policyBuilder
+        .WithOrigins("asd")
+        .WithMethods("GET", "POST")
+        .WithHeaders("Content-Type", "Authorization")
+        .AllowCredentials();
+    });
+});
+
 builder.Host.UseSerilog((context, cfg) =>
 {
     cfg.ReadFrom.Configuration(context.Configuration);
@@ -38,5 +50,5 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseCors("MyPolicy");
 app.Run();

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using Ostool.Application.Abstractions.Repositories;
 using Ostool.Domain.Entities;
 using System;
@@ -23,6 +24,11 @@ namespace Ostool.Infrastructure.Persistence.Repositories
             _dbContext.Cars.Add(car);
         }
 
+        public void AddRange(List<Car> cars)
+        {
+            _dbContext.Cars.AddRange(cars);
+        }
+
         public void Delete(Car car)
         {
             _dbContext.Cars.Remove(car);
@@ -30,12 +36,22 @@ namespace Ostool.Infrastructure.Persistence.Repositories
 
         public async Task<List<Car>> GetAll()
         {
-            return await _dbContext.Cars.ToListAsync();
+            return await _dbContext.Cars
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<List<Car>> GetAllByBrand(string brand)
         {
-            return await _dbContext.Cars.Where(x => x.Brand == brand).ToListAsync();
+            return await _dbContext.Cars
+                .AsNoTracking()
+                .Where(x => x.Brand == brand)
+                .ToListAsync();
+        }
+
+        public async Task<Car?> GetById(Guid carId)
+        {
+            return await _dbContext.Cars.FirstOrDefaultAsync(x => x.Id == carId);
         }
 
         public async Task<Car?> GetByModelName(string modelName)

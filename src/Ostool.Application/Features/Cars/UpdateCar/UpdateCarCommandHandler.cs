@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Ostool.Application.Features.Cars.UpdateCar
 {
-    public record UpdateCarCommand(Guid Id, string Brand, string Model, int Year, decimal AvgPrice) : IRequest<Result>;
+    public record UpdateCarCommand(Guid Id, string Brand, string Model, decimal AvgPrice) : IRequest<Result>;
 
     internal class UpdateCarCommandHandler : IRequestHandler<UpdateCarCommand, Result>
     {

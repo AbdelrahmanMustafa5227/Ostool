@@ -11,6 +11,7 @@ namespace Ostool.Domain.Entities
         public Guid Id { get; set; }
         public string Description { get; private set; } = string.Empty;
         public decimal Price { get; private set; }
+        public int Year { get; set; }
         public DateTime PostedDate { get; private set; }
         public DateTime? ExpirationDate { get; private set; }
 

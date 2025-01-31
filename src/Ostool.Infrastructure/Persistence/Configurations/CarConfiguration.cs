@@ -24,8 +24,6 @@ namespace Ostool.Infrastructure.Persistence.Configurations
                 .Property(x => x.Brand)
                 .HasColumnType("varchar(50)");
 
-            builder.Property(x => x.Year);
-
             builder
                 .Property(x => x.AvgPrice)
                 .HasColumnType("decimal(18,2)");

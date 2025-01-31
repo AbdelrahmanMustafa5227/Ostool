@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Ostool.Application.Features.Cars.AddCar;
+using Ostool.Application.Features.Cars.GetByBrand;
 using Ostool.Application.Features.Cars.UpdateCar;
 using Ostool.Domain.Entities;
 using System;
@@ -20,8 +21,12 @@ namespace Ostool.Application.Mappings
                 Model = command.Model,
                 Brand = command.Brand,
                 AvgPrice = command.AvgPrice,
-                Year = command.Year
             };
+        }
+
+        public static GetByBrandResponse ToDto(this Car command)
+        {
+            return new GetByBrandResponse(command.Brand, command.Model, command.AvgPrice);
         }
 
         public static Car ToModel(this UpdateCarCommand command)
@@ -32,7 +37,6 @@ namespace Ostool.Application.Mappings
                 Model = command.Model,
                 Brand = command.Brand,
                 AvgPrice = command.AvgPrice,
-                Year = command.Year
             };
         }
 
@@ -41,7 +45,6 @@ namespace Ostool.Application.Mappings
             car.Model = command.Model;
             car.Brand = command.Brand;
             car.AvgPrice = command.AvgPrice;
-            car.Year = command.Year;
             return car;
         }
     }
