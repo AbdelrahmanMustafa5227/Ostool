@@ -1,4 +1,5 @@
-﻿using Ostool.Domain.Entities;
+﻿using Ostool.Application.Features.Advertisements.Responses;
+using Ostool.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,9 @@ namespace Ostool.Application.Abstractions.Repositories
     {
         void Add(Advertisement advertisement);
         void Update(Advertisement advertisement);
-        Task<List<Advertisement>> GetAll();
-        Task<List<Advertisement>> GetAllByVendor(string vendorName);
-        Task<List<Advertisement>> GetAllByCarModel(string carModel);
+        Task<AdvertisementDetailedResponse?> GetById(Guid id);
+        Task<List<AdvertisementResponse>> GetAll();
+        Task<List<AdvertisementResponse>> GetAllByVendor(string vendorName);
+        Task<List<AdvertisementResponse>> GetAllByCarModel(string carModel);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using Ostool.Application.Abstractions.Logging;
 using Ostool.Application.Abstractions.Repositories;
 using Ostool.Application.Caching.Cars;
 using Ostool.Application.Features.Cars.GetByBrand;
@@ -19,9 +20,9 @@ namespace Ostool.Application.Features.Cars.DeleteCar
         private readonly ICarRepository _carRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPublisher _publisher;
-        private readonly ILogger<DeleteCarCommand> _logger;
+        private readonly ITestableLogger<DeleteCarCommand> _logger;
 
-        public DeleteCarCommandHandler(ICarRepository carRepository, IUnitOfWork unitOfWork, ILogger<DeleteCarCommand> logger, IPublisher publisher)
+        public DeleteCarCommandHandler(ICarRepository carRepository, IUnitOfWork unitOfWork, ITestableLogger<DeleteCarCommand> logger, IPublisher publisher)
         {
             _carRepository = carRepository;
             _unitOfWork = unitOfWork;

@@ -9,16 +9,16 @@ namespace Ostool.Domain.Entities
     public class Advertisement
     {
         public Guid Id { get; set; }
-        public string Description { get; private set; } = string.Empty;
-        public decimal Price { get; private set; }
+        public string? Description { get; set; }
+        public decimal Price { get; set; }
         public int Year { get; set; }
-        public DateTime PostedDate { get; private set; }
-        public DateTime? ExpirationDate { get; private set; }
+        public DateTime PostedDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
 
-        public Vendor Vendor { get; set; } = new();
+        public Vendor Vendor { get; set; } = null!;
         public Guid VendorId { get; set; }
 
-        public Car Car { get; set; } = new();
+        public Car Car { get; set; } = null!;
         public Guid CarId { get; set; }
     }
 }

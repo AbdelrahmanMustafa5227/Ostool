@@ -11,5 +11,8 @@ namespace Ostool.Application.Abstractions.Repositories
     {
         void Add(Vendor vendor);
         void Update(Vendor vendor);
+        void Delete(Vendor vendor);
+        Task<Vendor?> GetById(Guid Id);
+        Task<bool> Exists(string EmailAddress);
     }
 }

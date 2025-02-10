@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using Ostool.Application.Abstractions.Logging;
 using Ostool.Application.Abstractions.Repositories;
 using Ostool.Application.Caching.Cars;
 using Ostool.Application.Helpers;
@@ -18,10 +19,10 @@ namespace Ostool.Application.Features.Cars.AddCar
     {
         private readonly ICarRepository _carRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<AddCarCommandHandler> _logger;
+        private readonly ITestableLogger<AddCarCommandHandler> _logger;
         private readonly IPublisher _publisher;
 
-        public AddCarCommandHandler(ICarRepository carRepository, IUnitOfWork unitOfWork, ILogger<AddCarCommandHandler> logger, IPublisher publisher)
+        public AddCarCommandHandler(ICarRepository carRepository, IUnitOfWork unitOfWork, ITestableLogger<AddCarCommandHandler> logger, IPublisher publisher)
         {
             _carRepository = carRepository;
             _unitOfWork = unitOfWork;
@@ -31,6 +32,13 @@ namespace Ostool.Application.Features.Cars.AddCar
 
         public async Task<Result> Handle(AddCarCommand request, CancellationToken cancellationToken)
         {
+            var carFromDb = await _carRepository.GetByModelName(request.Model);
+            if (carFromDb is not null)
+            {
+                _logger.LogError("A Conflict Error has occurred with message \"This Car Brand Already Exists\"");
+                return Result.Failure(new Error("This Car Brand Already Exists", HttpStatusCode.Conflict, "Conflict"));
+            }
+
             _carRepository.Add(request.ToModel());
             await _unitOfWork.SaveChangesAsync();
             await _publisher.Publish(new CarCacheInvalidationOnAddOrDeleteEvent(request.Brand));

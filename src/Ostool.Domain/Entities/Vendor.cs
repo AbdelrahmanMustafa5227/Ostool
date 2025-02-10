@@ -8,10 +8,10 @@ namespace Ostool.Domain.Entities
 {
     public class Vendor
     {
-        public Guid Id { get; private set; }
-        public string Name { get; private set; } = string.Empty;
-        public string ContactNumber { get; private set; } = string.Empty;
-        public string Email { get; private set; } = string.Empty;
-        public ICollection<Advertisement> Advertisements { get; private set; } = new List<Advertisement>();
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string ContactNumber { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public ICollection<Advertisement> Advertisements { get; set; } = new List<Advertisement>();
     }
 }
