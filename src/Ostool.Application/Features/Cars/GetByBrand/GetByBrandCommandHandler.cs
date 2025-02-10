@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Ostool.Application.Abstractions.Cache;
+using Ostool.Application.Abstractions.Logging;
 using Ostool.Application.Abstractions.Repositories;
 using Ostool.Application.Helpers;
 using System;
@@ -22,9 +23,9 @@ namespace Ostool.Application.Features.Cars.GetByBrand
     internal class GetByBrandCommandHandler : IRequestHandler<GetByBrandCommand, Result<List<GetByBrandResponse>>>
     {
         private readonly ICarRepository _carRepository;
-        private readonly ILogger<GetByBrandCommandHandler> _logger;
+        private readonly ITestableLogger<GetByBrandCommandHandler> _logger;
 
-        public GetByBrandCommandHandler(ICarRepository carRepository, ILogger<GetByBrandCommandHandler> logger)
+        public GetByBrandCommandHandler(ICarRepository carRepository, ITestableLogger<GetByBrandCommandHandler> logger)
         {
             _carRepository = carRepository;
             _logger = logger;
@@ -35,10 +36,7 @@ namespace Ostool.Application.Features.Cars.GetByBrand
             var Cars = await _carRepository.GetAllByBrand(request.Brand);
 
             if (Cars == null)
-                return Result.Failure<List<GetByBrandResponse>>(new Error(
-                    "Brand Name Could not be found",
-                    HttpStatusCode.NotFound, "Resource Not Found")
-                    );
+                return new List<GetByBrandResponse>();
 
             var responseDto = new List<GetByBrandResponse>();
 

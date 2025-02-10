@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ostool.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using Ostool.Infrastructure.Persistence;
 namespace Ostool.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250209152102_deletedSomeCarSpecsRowsForSimplicity")]
+    partial class deletedSomeCarSpecsRowsForSimplicity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace Ostool.Infrastructure.Migrations
 
                     b.HasIndex("VendorId");
 
-                    b.ToTable("Advertisements", (string)null);
+                    b.ToTable("Advertisements");
                 });
 
             modelBuilder.Entity("Ostool.Domain.Entities.Car", b =>
@@ -79,7 +82,7 @@ namespace Ostool.Infrastructure.Migrations
                     b.HasIndex("Model")
                         .IsUnique();
 
-                    b.ToTable("Cars", (string)null);
+                    b.ToTable("Cars");
                 });
 
             modelBuilder.Entity("Ostool.Domain.Entities.CarSpecs", b =>
@@ -125,7 +128,7 @@ namespace Ostool.Infrastructure.Migrations
 
                     b.HasKey("CarId");
 
-                    b.ToTable("CarSpecs", (string)null);
+                    b.ToTable("CarSpecs");
                 });
 
             modelBuilder.Entity("Ostool.Domain.Entities.Vendor", b =>
@@ -152,7 +155,7 @@ namespace Ostool.Infrastructure.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Vendors", (string)null);
+                    b.ToTable("Vendors");
                 });
 
             modelBuilder.Entity("Ostool.Domain.Entities.Advertisement", b =>

@@ -23,11 +23,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ostool.Domain", "src\Ostool
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ostool.Infrastructure", "src\Ostool.Infrastructure\Ostool.Infrastructure.csproj", "{3F620352-32A2-49A7-9869-84505F83DE11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalTests", "tests\FunctionalTests\FunctionalTests.csproj", "{538C9578-97BD-49A7-8383-72C215BAED27}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ostool.FunctionalTests", "tests\FunctionalTests\Ostool.FunctionalTests.csproj", "{538C9578-97BD-49A7-8383-72C215BAED27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "tests\IntegrationTests\IntegrationTests.csproj", "{A1ED4DB3-EFDB-41A5-B1FB-78C9C63F899F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ostool.IntegrationTests", "tests\IntegrationTests\Ostool.IntegrationTests.csproj", "{A1ED4DB3-EFDB-41A5-B1FB-78C9C63F899F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "tests\UnitTests.Application\UnitTests.csproj", "{48026814-D2B2-4CD2-BDE1-84776705B314}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ostool.UnitTests", "tests\UnitTests.Application\Ostool.UnitTests.csproj", "{48026814-D2B2-4CD2-BDE1-84776705B314}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
