@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Ostool.Application.Abstractions.Repositories;
+using Ostool.Application.Caching.Vendors;
 using Ostool.Application.Helpers;
 using System;
 using System.Collections.Generic;
@@ -14,13 +15,16 @@ namespace Ostool.Application.Features.Vendors.AddVendor
     internal class AddVendorCommandHandler : IRequestHandler<AddVendorCommand, Result>
     {
         private readonly IVendorRepository _vendorRepository;
+        private readonly IPublisher _publisher;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AddVendorCommandHandler(IVendorRepository vendorRepository, IUnitOfWork unitOfWork)
+        public AddVendorCommandHandler(IVendorRepository vendorRepository, IUnitOfWork unitOfWork, IPublisher publisher)
         {
             _vendorRepository = vendorRepository;
             _unitOfWork = unitOfWork;
+            _publisher = publisher;
         }
+
         public async Task<Result> Handle(AddVendorCommand request, CancellationToken cancellationToken)
         {
             if (await _vendorRepository.Exists(request.Email))
@@ -28,6 +32,7 @@ namespace Ostool.Application.Features.Vendors.AddVendor
 
             _vendorRepository.Add(request.ToModel());
             await _unitOfWork.SaveChangesAsync();
+            await _publisher.Publish(new VendorsCacheInvalidationEvent());
             return Result.Success();
         }
     }

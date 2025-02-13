@@ -5,6 +5,7 @@ using Ostool.Application.Abstractions.Logging;
 using Ostool.Application.Abstractions.Repositories;
 using Ostool.Application.Features.Cars.DeleteCar;
 using Ostool.Application.Features.Cars.GetByBrand;
+using Ostool.Application.Helpers;
 using Ostool.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -27,16 +28,16 @@ namespace Ostool.UnitTests.CarTests
         }
 
         [Fact]
-        public async Task NoCarHasThisBrand_ShouldFail()
+        public async Task NoCarHasThisBrand_ShouldReturnEmptyList()
         {
             // Arrange
-            var command = new GetByBrandCommand("Brand");
-            _carRepository.GetAllByBrand(command.Brand).ReturnsNull();
+            var command = new GetByBrandCommand("Brand", 1);
+            _carRepository.GetAllByBrand(command.Brand, command.pageNumber).Returns(new QueryResult<Car>(new List<Car>()));
             // Act
             var result = await _handler.Handle(command, default);
             // Assert
             Assert.True(result.IsSuccess);
-            Assert.Equal(result.Value, new List<GetByBrandResponse>());
+            Assert.Equal(result.Value.Items, new List<GetByBrandResponse>());
             _logger.Received(0).LogError(Arg.Any<string>());
         }
 
@@ -44,9 +45,9 @@ namespace Ostool.UnitTests.CarTests
         public async Task SomeCarsHasThisBrand_ShouldReturnList()
         {
             // Arrange
-            var command = new GetByBrandCommand("Brand");
-            var cars = new List<Car>();
-            _carRepository.GetAllByBrand(command.Brand).Returns(cars);
+            var command = new GetByBrandCommand("Brand", 1);
+            var cars = new QueryResult<Car>(new List<Car>());
+            _carRepository.GetAllByBrand(command.Brand, 1).Returns(cars);
             // Act
             var result = await _handler.Handle(command, default);
             // Assert

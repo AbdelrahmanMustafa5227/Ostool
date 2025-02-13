@@ -17,4 +17,8 @@
 		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Caching\Advertisements\" />
+	</ItemGroup>
+
 </Project>

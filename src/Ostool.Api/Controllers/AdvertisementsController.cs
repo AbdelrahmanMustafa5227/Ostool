@@ -28,23 +28,23 @@ namespace Ostool.Api.Controllers
         }
 
         [HttpGet("GetAllByModel")]
-        public async Task<IActionResult> GetAllByModel([FromQuery] string model)
+        public async Task<IActionResult> GetAllByModel([FromQuery] string model, int page)
         {
-            var result = await _mediator.Send(new GetAllAdsByModelCommand(model));
+            var result = await _mediator.Send(new GetAllAdsByModelCommand(model, page));
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
         }
 
         [HttpGet("GetAllByVendor")]
-        public async Task<IActionResult> GetAllByVendor([FromQuery] string vendor)
+        public async Task<IActionResult> GetAllByVendor([FromQuery] string vendor, int page)
         {
-            var result = await _mediator.Send(new GetAllByVendorCommand(vendor));
+            var result = await _mediator.Send(new GetAllByVendorCommand(vendor, page));
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] int page)
         {
-            var result = await _mediator.Send(new GetAllAdsCommand());
+            var result = await _mediator.Send(new GetAllAdsCommand(page));
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
         }
 

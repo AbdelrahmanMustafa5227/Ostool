@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Ostool.Application.Abstractions.Repositories;
 using Ostool.Application.Features.Advertisements.Responses;
+using Ostool.Application.Helpers;
 using Ostool.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -26,36 +27,57 @@ namespace Ostool.Infrastructure.Persistence.Repositories
             _appDbContext.Advertisements.Add(advertisement);
         }
 
-        public async Task<List<AdvertisementResponse>> GetAll()
+        public async Task<QueryResult<AdvertisementResponse>> GetAll(int pageNumber)
         {
-            return await _appDbContext
+            var totalItems = await _appDbContext.Advertisements.CountAsync();
+
+            var ads = await _appDbContext
                 .Advertisements
+                .OrderBy(x => x.PostedDate)
+                .Skip((pageNumber - 1) * 10)
+                .Take(10)
                 .Include(x => x.Car)
                 .Include(x => x.Vendor)
                 .Select(x => new AdvertisementResponse(x.Id, x.Car.Brand, x.Car.Model, x.Vendor.Name, x.Price, x.Year))
                 .ToListAsync();
+
+            return new QueryResult<AdvertisementResponse>(ads, totalItems);
         }
 
-        public async Task<List<AdvertisementResponse>> GetAllByCarModel(string carModel)
+        public async Task<QueryResult<AdvertisementResponse>> GetAllByCarModel(string carModel, int pageNumber)
         {
-            return await _appDbContext
+            var totalItems = await _appDbContext.Advertisements.CountAsync(x => x.Car.Model == carModel);
+
+            var ads = await _appDbContext
                 .Advertisements
+                .OrderBy(x => x.PostedDate)
+                .Skip((pageNumber - 1) * 10)
+                .Take(10)
                 .Include(x => x.Car)
                 .Include(x => x.Vendor)
                 .Where(x => x.Car.Model == carModel)
                 .Select(x => new AdvertisementResponse(x.Id, x.Car.Brand, x.Car.Model, x.Vendor.Name, x.Price, x.Year))
                 .ToListAsync();
+
+            return new QueryResult<AdvertisementResponse>(ads, totalItems);
         }
 
-        public async Task<List<AdvertisementResponse>> GetAllByVendor(string vendorName)
+        public async Task<QueryResult<AdvertisementResponse>> GetAllByVendor(string vendorName, int pageNumber)
         {
-            return await _appDbContext
+            var totalItems = await _appDbContext.Advertisements.CountAsync(x => x.Vendor.Name == vendorName);
+
+            var ads = await _appDbContext
                 .Advertisements
+                .Where(x => x.Vendor.Name == vendorName)
+                .OrderBy(x => x.PostedDate)
+                .Skip((pageNumber - 1) * 10)
+                .Take(10)
                 .Include(x => x.Car)
                 .Include(x => x.Vendor)
-                .Where(x => x.Vendor.Name == vendorName)
                 .Select(x => new AdvertisementResponse(x.Id, x.Car.Brand, x.Car.Model, x.Vendor.Name, x.Price, x.Year))
                 .ToListAsync();
+
+            return new QueryResult<AdvertisementResponse>(ads, totalItems);
         }
 
         public async Task<AdvertisementDetailedResponse?> GetById(Guid id)

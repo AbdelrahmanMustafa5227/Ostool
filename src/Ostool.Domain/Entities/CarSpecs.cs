@@ -1,4 +1,5 @@
-﻿using Ostool.Domain.Enums;
+﻿using Ostool.Domain.Abstractions;
+using Ostool.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Ostool.Domain.Entities
 {
-    public class CarSpecs
+    public class CarSpecs : IEntity
     {
         // Dimensions
         public CarBodyStyle BodyStyle { get; set; }  // Sedan, coupe, SUV, hatchback

@@ -39,7 +39,7 @@ namespace Ostool.Application.Behaviors
 
             _cache.Set(request.CacheKey, response, new MemoryCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(3)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(request.DurationInSeconds)
             });
 
             return response;

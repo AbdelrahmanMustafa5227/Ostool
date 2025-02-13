@@ -31,5 +31,22 @@ namespace Ostool.Application.Mappings
                 SeatingCapacity = command.SeatingCapacity,
             };
         }
+
+        public static CarSpecs ApplyChanges(this CarSpecs carSpecs, AddCarDetailsCommand command)
+        {
+            carSpecs.BodyStyle = command.BodyStyle;
+            carSpecs.GroundClearance = command.GroundClearance;
+            carSpecs.EngineType = command.EngineType;
+            carSpecs.Displacement = command.Displacement;
+            carSpecs.Horsepower = command.HorsePower;
+            carSpecs.NumberOfCylinders = command.numOfCylinders;
+            carSpecs.TransmissionType = command.TransmissionType;
+            carSpecs.NumberOfGears = command.numOfGears;
+            carSpecs.TopSpeed = command.TopSpeed;
+            carSpecs.ZeroToSixty = command.ZeroToSixty;
+            carSpecs.HasSunRoof = command.HasSumRoof;
+            carSpecs.SeatingCapacity = command.SeatingCapacity;
+            return carSpecs;
+        }
     }
 }

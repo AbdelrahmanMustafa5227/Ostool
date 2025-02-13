@@ -1,4 +1,5 @@
-﻿using Ostool.Application.Abstractions.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Ostool.Application.Abstractions.Repositories;
 using Ostool.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,11 @@ namespace Ostool.Infrastructure.Persistence.Repositories
         public void Add(CarSpecs specs)
         {
             _dbContext.CarSpecs.Add(specs);
+        }
+
+        public async Task<CarSpecs?> GetById(Guid carId)
+        {
+            return await _dbContext.CarSpecs.FirstOrDefaultAsync(x => x.CarId == carId);
         }
 
         public void Update(CarSpecs specs)

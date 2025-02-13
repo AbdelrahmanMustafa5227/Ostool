@@ -28,14 +28,19 @@ namespace Ostool.Application.Features.CarSpecs.AddCarDetails
             _carSpecsRepository = carSpecsRepository;
         }
 
-
         public async Task<Result> Handle(AddCarDetailsCommand request, CancellationToken cancellationToken)
         {
             var car = await _carRepository.GetById(request.CarId);
             if (car == null)
                 return Result.Failure(new Error("No Car With Supplied Id", HttpStatusCode.NotFound, "Resource Not Found"));
 
-            _carSpecsRepository.Add(request.ToModel());
+            var spec = await _carSpecsRepository.GetById(request.CarId);
+
+            if (spec != null)
+                _carSpecsRepository.Update(spec.ApplyChanges(request));
+            else
+                _carSpecsRepository.Add(request.ToModel());
+
             await _unitOfWork.SaveChangesAsync();
             return Result.Success();
         }

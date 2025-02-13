@@ -13,14 +13,15 @@ using System.Threading.Tasks;
 
 namespace Ostool.Application.Features.Cars.GetByBrand
 {
-    public record GetByBrandCommand(string Brand) : IRequest<Result<List<GetByBrandResponse>>>, ICacheable
+    public record GetByBrandCommand(string Brand, int pageNumber) : IRequest<Result<Paginated<GetByBrandResponse>>>, ICacheable
     {
-        public string CacheKey => $"Cars:{Brand}";
+        public string CacheKey => $"Cars:{Brand}:{pageNumber}";
+        public int DurationInSeconds => 10 * 60;
     }
 
     public record GetByBrandResponse(string Brand, string Model, decimal AvgPrice);
 
-    internal class GetByBrandCommandHandler : IRequestHandler<GetByBrandCommand, Result<List<GetByBrandResponse>>>
+    internal class GetByBrandCommandHandler : IRequestHandler<GetByBrandCommand, Result<Paginated<GetByBrandResponse>>>
     {
         private readonly ICarRepository _carRepository;
         private readonly ITestableLogger<GetByBrandCommandHandler> _logger;
@@ -31,21 +32,15 @@ namespace Ostool.Application.Features.Cars.GetByBrand
             _logger = logger;
         }
 
-        public async Task<Result<List<GetByBrandResponse>>> Handle(GetByBrandCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Paginated<GetByBrandResponse>>> Handle(GetByBrandCommand request, CancellationToken cancellationToken)
         {
-            var Cars = await _carRepository.GetAllByBrand(request.Brand);
+            var queryResult = await _carRepository.GetAllByBrand(request.Brand, request.pageNumber);
 
-            if (Cars == null)
-                return new List<GetByBrandResponse>();
+            var responseDto = queryResult.Items.Select(x => x.ToDto()).ToList();
 
-            var responseDto = new List<GetByBrandResponse>();
+            var pagedResult = Paginated<GetByBrandResponse>.Create(responseDto, request.pageNumber, 10, queryResult.TotalRecords);
 
-            foreach (var Car in Cars)
-            {
-                responseDto.Add(Car.ToDto());
-            }
-
-            return responseDto;
+            return pagedResult;
         }
     }
 }

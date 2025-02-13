@@ -11,5 +11,6 @@ namespace Ostool.Application.Abstractions.Repositories
     {
         void Add(CarSpecs specs);
         void Update(CarSpecs specs);
+        Task<CarSpecs?> GetById(Guid carId);
     }
 }

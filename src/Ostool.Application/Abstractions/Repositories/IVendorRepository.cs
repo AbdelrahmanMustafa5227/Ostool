@@ -13,6 +13,7 @@ namespace Ostool.Application.Abstractions.Repositories
         void Update(Vendor vendor);
         void Delete(Vendor vendor);
         Task<Vendor?> GetById(Guid Id);
+        Task<QueryResult<Vendor>> GetAll(int pageNumber);
         Task<bool> Exists(string EmailAddress);
     }
 }

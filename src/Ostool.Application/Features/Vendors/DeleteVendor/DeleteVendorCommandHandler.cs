@@ -1,4 +1,5 @@
 ﻿using Ostool.Application.Abstractions.Repositories;
+using Ostool.Application.Caching.Vendors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,13 @@ namespace Ostool.Application.Features.Vendors.DeleteVendor
     {
         private readonly IVendorRepository _vendorRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPublisher _publisher;
 
-        public DeleteVendorCommandHandler(IVendorRepository vendorRepository, IUnitOfWork unitOfWork)
+        public DeleteVendorCommandHandler(IVendorRepository vendorRepository, IUnitOfWork unitOfWork, IPublisher publisher)
         {
             _vendorRepository = vendorRepository;
             _unitOfWork = unitOfWork;
+            _publisher = publisher;
         }
 
         public async Task<Result> Handle(DeleteVendorCommand request, CancellationToken cancellationToken)
@@ -28,6 +31,7 @@ namespace Ostool.Application.Features.Vendors.DeleteVendor
 
             _vendorRepository.Delete(vendor);
             await _unitOfWork.SaveChangesAsync();
+            await _publisher.Publish(new VendorsCacheInvalidationEvent());
             return Result.Success();
         }
     }

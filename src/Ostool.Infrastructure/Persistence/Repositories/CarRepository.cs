@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Ostool.Application.Abstractions.Repositories;
+using Ostool.Application.Helpers;
 using Ostool.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Ostool.Infrastructure.Persistence.Repositories
 {
-    public class CarRepository : ICarRepository
+    public class CarRepository : Repository<Car>, ICarRepository
     {
         private readonly AppDbContext _dbContext;
 
-        public CarRepository(AppDbContext dbContext)
+        public CarRepository(AppDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
@@ -34,19 +35,37 @@ namespace Ostool.Infrastructure.Persistence.Repositories
             _dbContext.Cars.Remove(car);
         }
 
-        public async Task<List<Car>> GetAll()
+        public async Task<QueryResult<Car>> GetAll(int pageNumber)
         {
-            return await _dbContext.Cars
-                .AsNoTracking()
+            var query = _dbContext.Cars
+                .AsNoTracking();
+
+            var totalRecords = await query.CountAsync();
+
+            var list = await query
+                .OrderBy(x => x.Model)
+                .Skip((pageNumber - 1) * 5)
+                .Take(5)
                 .ToListAsync();
+
+            return new QueryResult<Car>(list, totalRecords);
         }
 
-        public async Task<List<Car>> GetAllByBrand(string brand)
+        public async Task<QueryResult<Car>> GetAllByBrand(string brand, int pageNumber)
         {
-            return await _dbContext.Cars
+            var query = _dbContext.Cars
                 .AsNoTracking()
-                .Where(x => x.Brand == brand)
+                .Where(x => x.Brand == brand);
+
+            var TotalRecords = await query.CountAsync();
+
+            var list = await query
+                .OrderBy(x => x.Model)
+                .Skip((pageNumber - 1) * 10)
+                .Take(10)
                 .ToListAsync();
+
+            return new QueryResult<Car>(list, TotalRecords);
         }
 
         public async Task<Car?> GetById(Guid carId)

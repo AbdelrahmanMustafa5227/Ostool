@@ -1,4 +1,5 @@
-﻿using Ostool.Application.Abstractions.Repositories;
+﻿using Ostool.Application.Abstractions.Cache;
+using Ostool.Application.Abstractions.Repositories;
 using Ostool.Application.Features.Advertisements.Responses;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,14 @@ using System.Threading.Tasks;
 
 namespace Ostool.Application.Features.Advertisements.GetAll
 {
-    public record GetAllAdsCommand : IRequest<Result<List<AdvertisementResponse>>>;
+    public record GetAllAdsCommand(int pageNumber) : IRequest<Result<Paginated<AdvertisementResponse>>>, ICacheable
+    {
+        public string CacheKey => $"AllAds:{pageNumber}";
 
-    internal class GetAllAdsCommandHandler : IRequestHandler<GetAllAdsCommand, Result<List<AdvertisementResponse>>>
+        public int DurationInSeconds => 30;
+    }
+
+    internal class GetAllAdsCommandHandler : IRequestHandler<GetAllAdsCommand, Result<Paginated<AdvertisementResponse>>>
     {
         private readonly IAdvertisementRepository _advertisementRepository;
 
@@ -18,10 +24,13 @@ namespace Ostool.Application.Features.Advertisements.GetAll
         {
             _advertisementRepository = advertisementRepository;
         }
-        public async Task<Result<List<AdvertisementResponse>>> Handle(GetAllAdsCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Paginated<AdvertisementResponse>>> Handle(GetAllAdsCommand request, CancellationToken cancellationToken)
         {
-            var ads = await _advertisementRepository.GetAll();
-            return Result.Success(ads);
+            var ads = await _advertisementRepository.GetAll(request.pageNumber);
+
+            var pagedResult = Paginated<AdvertisementResponse>.Create(ads.Items, request.pageNumber, 10, ads.TotalRecords);
+
+            return Result.Success(pagedResult);
         }
     }
 }

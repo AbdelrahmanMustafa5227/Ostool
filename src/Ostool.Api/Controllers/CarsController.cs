@@ -47,9 +47,9 @@ namespace Ostool.Api.Controllers
         }
 
         [HttpGet("GetByBrand")]
-        public async Task<IActionResult> GetByBrand([FromQuery] string brandName)
+        public async Task<IActionResult> GetByBrand([FromQuery] string brandName, int page)
         {
-            var result = await _mediator.Send(new GetByBrandCommand(brandName));
+            var result = await _mediator.Send(new GetByBrandCommand(brandName, page));
 
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
         }

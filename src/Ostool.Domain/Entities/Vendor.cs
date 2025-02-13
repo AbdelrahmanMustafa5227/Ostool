@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ostool.Domain.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ostool.Domain.Entities
 {
-    public class Vendor
+    public class Vendor : IEntity
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;

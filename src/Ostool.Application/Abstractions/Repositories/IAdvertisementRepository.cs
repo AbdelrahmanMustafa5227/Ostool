@@ -13,8 +13,8 @@ namespace Ostool.Application.Abstractions.Repositories
         void Add(Advertisement advertisement);
         void Update(Advertisement advertisement);
         Task<AdvertisementDetailedResponse?> GetById(Guid id);
-        Task<List<AdvertisementResponse>> GetAll();
-        Task<List<AdvertisementResponse>> GetAllByVendor(string vendorName);
-        Task<List<AdvertisementResponse>> GetAllByCarModel(string carModel);
+        Task<QueryResult<AdvertisementResponse>> GetAll(int pageNumber);
+        Task<QueryResult<AdvertisementResponse>> GetAllByVendor(string vendorName, int pageNumber);
+        Task<QueryResult<AdvertisementResponse>> GetAllByCarModel(string carModel, int pageNumber);
     }
 }

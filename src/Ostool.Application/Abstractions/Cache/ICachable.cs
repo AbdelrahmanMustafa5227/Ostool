@@ -9,5 +9,6 @@ namespace Ostool.Application.Abstractions.Cache
     public interface ICacheable
     {
         string CacheKey { get; }
+        int DurationInSeconds { get; }
     }
 }
