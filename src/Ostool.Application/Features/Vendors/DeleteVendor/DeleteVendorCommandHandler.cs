@@ -26,8 +26,11 @@ namespace Ostool.Application.Features.Vendors.DeleteVendor
         public async Task<Result> Handle(DeleteVendorCommand request, CancellationToken cancellationToken)
         {
             var vendor = await _vendorRepository.GetById(request.VendorId);
+
             if (vendor == null)
+            {
                 return Result.Failure(new Error("Could Not Find a vendor with Id", HttpStatusCode.NotFound, "Resourse Not Found"));
+            }
 
             _vendorRepository.Delete(vendor);
             await _unitOfWork.SaveChangesAsync();

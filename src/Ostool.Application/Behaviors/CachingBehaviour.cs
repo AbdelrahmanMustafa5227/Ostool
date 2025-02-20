@@ -5,6 +5,7 @@ using Ostool.Application.Abstractions.Cache;
 using Ostool.Application.Abstractions.Repositories;
 using Ostool.Application.Features.Cars.GetByBrand;
 using Ostool.Application.Helpers;
+using Ostool.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,17 +19,19 @@ namespace Ostool.Application.Behaviors
     {
         private readonly ILogger<TRequest> _logger;
         private readonly IMemoryCache _cache;
+        private readonly CachingService _cachingService;
 
-        public CachingBehaviour(ILogger<TRequest> logger, IMemoryCache cache)
+        public CachingBehaviour(ILogger<TRequest> logger, IMemoryCache cache, CachingService cachingService)
         {
             _logger = logger;
             _cache = cache;
+            _cachingService = cachingService;
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
 
-            if (_cache.TryGetValue(request.CacheKey, out TResponse? cachedResponse))
+            if (_cachingService.TryGetValue(request.CacheKey, out TResponse? cachedResponse))
             {
                 _logger.LogInformation("Cache Hit !");
                 return cachedResponse!;
@@ -37,11 +40,7 @@ namespace Ostool.Application.Behaviors
             _logger.LogInformation("Cache Miss !");
             var response = await next();
 
-            _cache.Set(request.CacheKey, response, new MemoryCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(request.DurationInSeconds)
-            });
-
+            _cachingService.Set(request.CacheKey, response, TimeSpan.FromSeconds(request.DurationInSeconds));
             return response;
         }
     }

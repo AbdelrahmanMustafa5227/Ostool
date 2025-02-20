@@ -1,8 +1,10 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using Ostool.Application.Abstractions;
 using Ostool.Application.Abstractions.Logging;
 using Ostool.Application.Behaviors;
+using Ostool.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +30,7 @@ namespace Ostool.Application
             services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, includeInternalTypes: true);
             services.AddTransient(typeof(ITestableLogger<>), typeof(TestableLogger<>));
             services.AddMemoryCache();
+            services.AddSingleton<CachingService>();
             return services;
         }
     }

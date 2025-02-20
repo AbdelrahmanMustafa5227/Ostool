@@ -1,8 +1,12 @@
 using Microsoft.Extensions.Hosting;
+using Ostool.Api.Helper;
 using Ostool.Api.Middlewares;
 using Ostool.Application;
+using Ostool.Application.Abstractions;
 using Ostool.Infrastructure;
 using Serilog;
+using System.Security.Claims;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,9 +15,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
     .AddJsonOptions(cfg => cfg.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
+
 builder.Services.AddOpenApi();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
+
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IUserContext, UserContext>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddProblemDetails(cfg =>
 {
@@ -23,15 +32,32 @@ builder.Services.AddProblemDetails(cfg =>
     };
 });
 
+builder.Services.AddAuthorization(p =>
+{
+    p.AddPolicy("Google", pb =>
+    {
+        pb.AddAuthenticationSchemes("Google");
+        pb.RequireAuthenticatedUser();
+        pb.RequireClaim("verified_email", "True");
+        pb.RequireClaim(ClaimTypes.Email);
+    });
+
+    p.AddPolicy("Local", pb =>
+    {
+        pb.AddAuthenticationSchemes("Bearer");
+        pb.RequireAuthenticatedUser();
+    });
+});
+
 builder.Services.AddCors(cfg =>
 {
     cfg.AddPolicy("MyPolicy", policyBuilder =>
     {
         policyBuilder
-        .WithOrigins("asd")
+        .AllowAnyOrigin()
         .WithMethods("GET", "POST")
-        .WithHeaders("Content-Type", "Authorization")
-        .AllowCredentials();
+        .WithHeaders("Content-Type", "Authorization");
+        //.AllowCredentials();
     });
 });
 
@@ -49,6 +75,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthorization();
 

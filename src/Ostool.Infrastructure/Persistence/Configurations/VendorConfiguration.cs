@@ -13,20 +13,13 @@ namespace Ostool.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Vendor> builder)
         {
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).ValueGeneratedNever();
-
             builder
-                .Property(x => x.Name)
+                .Property(x => x.VendorName)
                 .HasMaxLength(50);
 
             builder
                 .Property(x => x.ContactNumber)
                 .HasMaxLength(20);
-
-            builder
-                .HasIndex(x => x.Email)
-                .IsUnique(true);
 
             builder
                 .HasMany(x => x.Advertisements)

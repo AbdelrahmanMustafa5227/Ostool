@@ -5,6 +5,7 @@ using Ostool.Api.Filters;
 using Ostool.Application.Features.Vendors.AddVendor;
 using Ostool.Application.Features.Vendors.DeleteVendor;
 using Ostool.Application.Features.Vendors.GetAll;
+using Ostool.Application.Features.Vendors.GetById;
 using Ostool.Application.Features.Vendors.UpdateVendor;
 
 namespace Ostool.Api.Controllers
@@ -25,7 +26,7 @@ namespace Ostool.Api.Controllers
         public async Task<IActionResult> AddVendor(AddVendorCommand command)
         {
             var result = await _mediator.Send(command);
-            return result.IsSuccess ? Ok() : Problem(result.Error!);
+            return result.IsSuccess ? CreatedAtAction(nameof(GetVendorById), new { result.Value.Id }, result.Value) : Problem(result.Error!);
         }
 
         [HttpDelete("Delete")]
@@ -47,6 +48,13 @@ namespace Ostool.Api.Controllers
         public async Task<IActionResult> GetAllVendors([FromQuery] int page)
         {
             var result = await _mediator.Send(new GetAllVendorsCommand(page));
+            return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
+        }
+
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetVendorById([FromQuery] Guid id)
+        {
+            var result = await _mediator.Send(new GetVendorByIdCommand(id));
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
         }
     }

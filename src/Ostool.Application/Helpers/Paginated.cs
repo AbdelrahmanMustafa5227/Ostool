@@ -3,13 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Ostool.Application.Helpers
 {
     public class Paginated<T> where T : class
     {
-        private int TotalCount;
+        [JsonIgnore]
+        public int TotalCount { get; set; }
 
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
@@ -18,14 +20,15 @@ namespace Ostool.Application.Helpers
         public bool HasPrevPage => PageIndex > 1;
         public List<T> Items { get; set; }
 
-
-        private Paginated(List<T> items, int pageIndex, int pageSize, int totalCount)
+        [JsonConstructor]
+        public Paginated(List<T> items, int pageIndex, int pageSize, int totalCount)
         {
             Items = items;
             PageIndex = pageIndex;
             PageSize = pageSize;
             TotalCount = totalCount;
         }
+
 
         public static Paginated<T> Create(List<T> items, int pageNumber, int pageSize, int totalCount)
         {

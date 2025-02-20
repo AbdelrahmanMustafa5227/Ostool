@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Ostool.Api.Filters;
 using Ostool.Application.Features.Advertisements.GetAll;
 using Ostool.Application.Features.Advertisements.GetAllByModel;
 using Ostool.Application.Features.Advertisements.GetAllByVendor;
@@ -21,10 +22,11 @@ namespace Ostool.Api.Controllers
         }
 
         [HttpPost("Add")]
+        [Idempotent]
         public async Task<IActionResult> AddAd([FromBody] PostAdCommand command)
         {
             var result = await _mediator.Send(command);
-            return result.IsSuccess ? Ok() : Problem(result.Error!);
+            return result.IsSuccess ? CreatedAtAction(nameof(GetById), new { result.Value.Id }, result.Value) : Problem(result.Error!);
         }
 
         [HttpGet("GetAllByModel")]

@@ -38,7 +38,7 @@ namespace Ostool.Infrastructure.Persistence.Repositories
                 .Take(10)
                 .Include(x => x.Car)
                 .Include(x => x.Vendor)
-                .Select(x => new AdvertisementResponse(x.Id, x.Car.Brand, x.Car.Model, x.Vendor.Name, x.Price, x.Year))
+                .Select(x => new AdvertisementResponse(x.Id, x.Car.Brand, x.Car.Model, x.Vendor.VendorName, x.Price, x.Year))
                 .ToListAsync();
 
             return new QueryResult<AdvertisementResponse>(ads, totalItems);
@@ -56,7 +56,7 @@ namespace Ostool.Infrastructure.Persistence.Repositories
                 .Include(x => x.Car)
                 .Include(x => x.Vendor)
                 .Where(x => x.Car.Model == carModel)
-                .Select(x => new AdvertisementResponse(x.Id, x.Car.Brand, x.Car.Model, x.Vendor.Name, x.Price, x.Year))
+                .Select(x => new AdvertisementResponse(x.Id, x.Car.Brand, x.Car.Model, x.Vendor.VendorName, x.Price, x.Year))
                 .ToListAsync();
 
             return new QueryResult<AdvertisementResponse>(ads, totalItems);
@@ -64,17 +64,17 @@ namespace Ostool.Infrastructure.Persistence.Repositories
 
         public async Task<QueryResult<AdvertisementResponse>> GetAllByVendor(string vendorName, int pageNumber)
         {
-            var totalItems = await _appDbContext.Advertisements.CountAsync(x => x.Vendor.Name == vendorName);
+            var totalItems = await _appDbContext.Advertisements.CountAsync(x => x.Vendor.VendorName == vendorName);
 
             var ads = await _appDbContext
                 .Advertisements
-                .Where(x => x.Vendor.Name == vendorName)
+                .Where(x => x.Vendor.VendorName == vendorName)
                 .OrderBy(x => x.PostedDate)
                 .Skip((pageNumber - 1) * 10)
                 .Take(10)
                 .Include(x => x.Car)
                 .Include(x => x.Vendor)
-                .Select(x => new AdvertisementResponse(x.Id, x.Car.Brand, x.Car.Model, x.Vendor.Name, x.Price, x.Year))
+                .Select(x => new AdvertisementResponse(x.Id, x.Car.Brand, x.Car.Model, x.Vendor.VendorName, x.Price, x.Year))
                 .ToListAsync();
 
             return new QueryResult<AdvertisementResponse>(ads, totalItems);

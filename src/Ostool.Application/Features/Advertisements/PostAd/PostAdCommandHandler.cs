@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 namespace Ostool.Application.Features.Advertisements.PostAd
 {
     public record PostAdCommand(Guid VendorId, Guid CarId, string? Description,
-        decimal Price, int Year, DateTime? ExpirationDate) : IRequest<Result>;
+        decimal Price, int Year, DateTime? ExpirationDate) : IRequest<Result<PostAdCommandResponse>>;
 
+    public record PostAdCommandResponse(Guid Id, Guid VendorId, Guid CarId, string? Description,
+        decimal Price, int Year, DateTime? ExpirationDate);
 
-    internal class PostAdCommandHandler : IRequestHandler<PostAdCommand, Result>
+    internal class PostAdCommandHandler : IRequestHandler<PostAdCommand, Result<PostAdCommandResponse>>
     {
         private readonly IAdvertisementRepository _advertisementRepository;
         private readonly ICarRepository _carRepository;
@@ -26,19 +28,22 @@ namespace Ostool.Application.Features.Advertisements.PostAd
             _vendorRepository = vendorRepository;
         }
 
-        public async Task<Result> Handle(PostAdCommand request, CancellationToken cancellationToken)
+        public async Task<Result<PostAdCommandResponse>> Handle(PostAdCommand request, CancellationToken cancellationToken)
         {
             var car = await _carRepository.GetById(request.CarId);
             if (car == null)
-                return Result.Failure(new Error("Car not found", HttpStatusCode.NotFound, "NotFound"));
+                return Result.Failure<PostAdCommandResponse>(new Error("Car not found", HttpStatusCode.NotFound, "NotFound"));
 
             var vendor = await _vendorRepository.GetById(request.VendorId);
             if (vendor == null)
-                return Result.Failure(new Error("Vendor not found", HttpStatusCode.NotFound, "NotFound"));
+                return Result.Failure<PostAdCommandResponse>(new Error("Vendor not found", HttpStatusCode.NotFound, "NotFound"));
 
-            _advertisementRepository.Add(request.ToModel());
+            var ad = request.ToModel();
+            _advertisementRepository.Add(ad);
             await _unitOfWork.SaveChangesAsync();
-            return Result.Success();
+
+            var response = new PostAdCommandResponse(ad.Id, ad.VendorId, ad.CarId, ad.Description, ad.Price, ad.Year, ad.ExpirationDate);
+            return response;
         }
     }
 }

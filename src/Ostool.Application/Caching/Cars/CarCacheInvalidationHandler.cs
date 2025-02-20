@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Caching.Memory;
+using Ostool.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +11,16 @@ namespace Ostool.Application.Caching.Cars
 {
     internal class CarCacheInvalidationHandler : INotificationHandler<CarCacheInvalidationOnAddOrDeleteEvent>
     {
-        private readonly IMemoryCache _cache;
+        private readonly CachingService _cache;
 
-        public CarCacheInvalidationHandler(IMemoryCache cache)
+        public CarCacheInvalidationHandler(CachingService cache)
         {
             _cache = cache;
         }
 
         public async Task Handle(CarCacheInvalidationOnAddOrDeleteEvent notification, CancellationToken cancellationToken)
         {
-            _cache.Remove($"Cars:{notification.Brand}");
+            _cache.Remove(x => x.StartsWith($"Cars:{notification.Brand}"));
             await Task.CompletedTask;
         }
     }

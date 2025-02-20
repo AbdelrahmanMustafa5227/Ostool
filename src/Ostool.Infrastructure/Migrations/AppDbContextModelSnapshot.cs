@@ -55,7 +55,36 @@ namespace Ostool.Infrastructure.Migrations
 
                     b.HasIndex("VendorId");
 
-                    b.ToTable("Advertisements", (string)null);
+                    b.ToTable("Advertisements");
+                });
+
+            modelBuilder.Entity("Ostool.Domain.Entities.AppUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AuthProvider")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable((string)null);
+
+                    b.UseTpcMappingStrategy();
                 });
 
             modelBuilder.Entity("Ostool.Domain.Entities.Car", b =>
@@ -79,7 +108,7 @@ namespace Ostool.Infrastructure.Migrations
                     b.HasIndex("Model")
                         .IsUnique();
 
-                    b.ToTable("Cars", (string)null);
+                    b.ToTable("Cars");
                 });
 
             modelBuilder.Entity("Ostool.Domain.Entities.CarSpecs", b =>
@@ -125,34 +154,64 @@ namespace Ostool.Infrastructure.Migrations
 
                     b.HasKey("CarId");
 
-                    b.ToTable("CarSpecs", (string)null);
+                    b.ToTable("CarSpecs");
+                });
+
+            modelBuilder.Entity("Ostool.Infrastructure.Authentication.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpiresIn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Token")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Ostool.Domain.Entities.Vendor", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasBaseType("Ostool.Domain.Entities.AppUser");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContactNumber")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("VendorName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.ToTable("Vendors");
+                });
 
-                    b.HasIndex("Email")
-                        .IsUnique();
+            modelBuilder.Entity("Ostool.Domain.Entities.Visitor", b =>
+                {
+                    b.HasBaseType("Ostool.Domain.Entities.AppUser");
 
-                    b.ToTable("Vendors", (string)null);
+                    b.Property<bool>("SubscribedToNewsletter")
+                        .HasColumnType("bit");
+
+                    b.ToTable("Visitors");
                 });
 
             modelBuilder.Entity("Ostool.Domain.Entities.Advertisement", b =>

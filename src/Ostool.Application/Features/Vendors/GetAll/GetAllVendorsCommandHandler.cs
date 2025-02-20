@@ -29,7 +29,7 @@ namespace Ostool.Application.Features.Vendors.GetAll
         {
             var vendors = await _vendorRepository.GetAll(request.pageNumber);
 
-            var vendorsResponse = vendors.Items.Select(x => new GetAllVendorsResponse(x.Id, x.Name, x.ContactNumber, x.Email)).ToList();
+            var vendorsResponse = vendors.Items.Select(x => new GetAllVendorsResponse(x.Id, x.VendorName, x.ContactNumber, x.Email)).ToList();
 
             var pagedResult = Paginated<GetAllVendorsResponse>.Create(vendorsResponse, request.pageNumber, 10, vendors.TotalRecords);
 

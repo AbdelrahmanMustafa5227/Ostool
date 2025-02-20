@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ostool.Application.Abstractions.Logging
 {
-    internal interface ITestableLogger<T>
+    public interface ITestableLogger<T>
     {
         void LogInformation(string? message, params object?[] args);
         void LogError(string? message, Exception? exception = null, params object?[] args);

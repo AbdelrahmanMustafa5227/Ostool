@@ -32,12 +32,9 @@ namespace Ostool.Application.Features.Cars.AddListOfCars
 
         public async Task<Result> Handle(AddListOfCarsCommand request, CancellationToken cancellationToken)
         {
-            var cars = new List<Car>();
-
-            foreach (var car in request.Cars)
-            {
-                cars.Add(car.ToModel());
-            }
+            var cars = request.Cars
+                .Select(x => x.ToModel())
+                .ToList();
 
             _carRepository.AddRange(cars);
             await _unitOfWork.SaveChangesAsync();

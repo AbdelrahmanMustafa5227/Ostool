@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 
 namespace Ostool.Application.Features.Vendors.AddVendor
 {
-    public record AddVendorCommand(string Name, string ContactNumber, string Email) : IRequest<Result>;
+    public record AddVendorCommand(string Name, string ContactNumber, string Email) : IRequest<Result<AddVendorCommandResponse>>;
 
-    internal class AddVendorCommandHandler : IRequestHandler<AddVendorCommand, Result>
+    public record AddVendorCommandResponse(Guid Id, string Name, string ContactNumber, string Email);
+
+    internal class AddVendorCommandHandler : IRequestHandler<AddVendorCommand, Result<AddVendorCommandResponse>>
     {
         private readonly IVendorRepository _vendorRepository;
         private readonly IPublisher _publisher;
@@ -25,15 +27,18 @@ namespace Ostool.Application.Features.Vendors.AddVendor
             _publisher = publisher;
         }
 
-        public async Task<Result> Handle(AddVendorCommand request, CancellationToken cancellationToken)
+        public async Task<Result<AddVendorCommandResponse>> Handle(AddVendorCommand request, CancellationToken cancellationToken)
         {
             if (await _vendorRepository.Exists(request.Email))
-                return Result.Failure(new Error("Email Already Used", HttpStatusCode.Conflict, "Conflict Error"));
+                return Result.Failure<AddVendorCommandResponse>(new Error("Email Already Used", HttpStatusCode.Conflict, "Conflict Error"));
 
-            _vendorRepository.Add(request.ToModel());
+            var vendorModel = request.ToModel();
+            _vendorRepository.Add(vendorModel);
             await _unitOfWork.SaveChangesAsync();
             await _publisher.Publish(new VendorsCacheInvalidationEvent());
-            return Result.Success();
+
+            var response = new AddVendorCommandResponse(vendorModel.Id, vendorModel.VendorName, vendorModel.ContactNumber, vendorModel.Email);
+            return response;
         }
     }
 }

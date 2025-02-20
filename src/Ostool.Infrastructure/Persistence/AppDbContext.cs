@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Ostool.Application.Abstractions.Repositories;
 using Ostool.Domain.Entities;
+using Ostool.Infrastructure.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,13 @@ namespace Ostool.Infrastructure.Persistence
 
         }
 
+        public DbSet<Vendor> Vendors => Set<Vendor>();
+        public DbSet<Visitor> Visitors => Set<Visitor>();
+
         public DbSet<Car> Cars => Set<Car>();
         public DbSet<CarSpecs> CarSpecs => Set<CarSpecs>();
-        public DbSet<Vendor> Vendors => Set<Vendor>();
         public DbSet<Advertisement> Advertisements => Set<Advertisement>();
+        public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

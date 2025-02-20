@@ -16,7 +16,7 @@ namespace Ostool.Application.Mappings
             return new Vendor
             {
                 Id = Guid.NewGuid(),
-                Name = command.Name,
+                VendorName = command.Name,
                 Email = command.Email,
                 ContactNumber = command.ContactNumber
             };
@@ -25,7 +25,7 @@ namespace Ostool.Application.Mappings
         public static void ApplyChanges(this Vendor vendor, UpdateVendorCommand command)
         {
             vendor.Id = command.Id;
-            vendor.Name = command.Name;
+            vendor.VendorName = command.Name;
             vendor.Email = command.Email;
             vendor.ContactNumber = command.ContactNumber;
         }

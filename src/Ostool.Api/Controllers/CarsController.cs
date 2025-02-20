@@ -5,6 +5,7 @@ using Ostool.Application.Features.Cars.AddCar;
 using Ostool.Application.Features.Cars.AddListOfCars;
 using Ostool.Application.Features.Cars.DeleteCar;
 using Ostool.Application.Features.Cars.GetByBrand;
+using Ostool.Application.Features.Cars.GetById;
 using Ostool.Application.Features.Cars.UpdateCar;
 
 namespace Ostool.Api.Controllers
@@ -26,7 +27,7 @@ namespace Ostool.Api.Controllers
         {
             var result = await _mediator.Send(command);
 
-            return result.IsSuccess ? Created() : Problem(result.Error!);
+            return result.IsSuccess ? CreatedAtAction(nameof(GetById), new { Id = result.Value.Id }, result.Value) : Problem(result.Error!);
         }
 
         [HttpPost("AddList")]
@@ -54,7 +55,15 @@ namespace Ostool.Api.Controllers
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
         }
 
-        [HttpDelete]
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetById([FromQuery] Guid id)
+        {
+            var result = await _mediator.Send(new GetCarByIdCommand(id));
+
+            return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
+        }
+
+        [HttpDelete("Delete")]
         [Idempotent]
         public async Task<IActionResult> Delete([FromQuery] Guid carId)
         {
