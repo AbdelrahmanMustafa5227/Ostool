@@ -16,10 +16,10 @@ namespace Ostool.Infrastructure.Authentication
 {
     public class JwtTokenProvider : IJwtTokenProvider
     {
-        private readonly AuthOptions _options;
+        private readonly JwtOptions _options;
         private readonly AppDbContext _dbContext;
 
-        public JwtTokenProvider(IOptions<AuthOptions> options, AppDbContext dbContext)
+        public JwtTokenProvider(IOptions<JwtOptions> options, AppDbContext dbContext)
         {
             _options = options.Value;
             _dbContext = dbContext;

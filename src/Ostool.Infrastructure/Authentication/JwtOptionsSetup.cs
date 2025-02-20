@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace TradeX.Infrastructure.Authentication
 {
-    internal class AuthOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
+    internal class JwtOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
     {
-        private readonly AuthOptions _options;
+        private readonly JwtOptions _options;
 
-        public AuthOptionsSetup(IOptions<AuthOptions> options)
+        public JwtOptionsSetup(IOptions<JwtOptions> options)
         {
             _options = options.Value;
         }

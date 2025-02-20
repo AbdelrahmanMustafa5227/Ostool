@@ -32,7 +32,7 @@ namespace Ostool.IntegrationTests.CarTests
             _httpClient = appFactory.CreateClient();
         }
 
-        [Fact]
+        [Fact(Skip = "waiting for Docker Integration")]
         public async Task AddCar_WhenBrandAndModelAreValid_ReturnsCar()
         {
             // Arrange

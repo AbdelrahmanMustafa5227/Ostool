@@ -32,6 +32,7 @@ namespace Ostool.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            // Database and Persistance
             services.AddDbContext<AppDbContext>(cfg =>
             {
                 cfg.UseSqlServer(configuration.GetConnectionString("Default"));
@@ -43,16 +44,15 @@ namespace Ostool.Infrastructure
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IdempotencyService>();
 
-            //services.AddHostedService<TokenRefresherJob>();
-            //services.AddTransient<RefreshTokenContext>();
 
-            services.Configure<AuthOptions>(configuration.GetSection(AuthOptions.SectionName));
-            services.ConfigureOptions<AuthOptionsSetup>();
+
+            // Authentication
+            services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
+            services.Configure<GoogleOAuthOptions>(configuration.GetSection(GoogleOAuthOptions.SectionName));
+            services.ConfigureOptions<JwtOptionsSetup>();
+            services.ConfigureOptions<GoogleOAuthOptionsSetup>();
             services.AddScoped<IJwtTokenProvider, JwtTokenProvider>();
-
-
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -60,39 +60,22 @@ namespace Ostool.Infrastructure
             })
                 .AddCookie()
                 .AddJwtBearer("Bearer")
-                .AddOAuth("Google", o =>
-                {
-                    o.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                .AddOAuth("Google", _ => { });
 
-                    o.ClientId = "536185920438-ep2nq7cgald1avipu16tudr9n8dqlg7d.apps.googleusercontent.com";
-                    o.ClientSecret = "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";
-                    o.CallbackPath = "/signin-google";
 
-                    o.AuthorizationEndpoint = "https://accounts.google.com/o/oauth2/auth";
-                    o.AuthorizationEndpoint += "?prompt=consent&access_type=offline";
-                    o.TokenEndpoint = "https://accounts.google.com/o/oauth2/token";
-                    o.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
+            // Other Services
+            services.AddScoped<IdempotencyService>();
 
-                    o.Scope.Add("openid");
-                    o.Scope.Add("profile");
-                    o.Scope.Add("email");
-                    o.SaveTokens = true;
 
-                    o.Events.OnCreatingTicket = OAuthEvents.RegisterUser;
-                    o.Events.OnRemoteFailure = ctx =>
-                    {
-                        ctx.HandleResponse();
-                        ctx.Response.Redirect("/auth/GoogleAuthError?message=" + ctx.Failure!.Message);
-                        return Task.CompletedTask;
-                    };
 
-                    o.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-                    o.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-                    o.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
-                    o.ClaimActions.MapJsonKey("verified_email", "verified_email");
-                    o.ClaimActions.MapJsonKey("picture", "picture");
+            //services.AddHostedService<TokenRefresherJob>();
+            //services.AddTransient<RefreshTokenContext>();
+            //configuration.GetValue<TimeSpan>("key" , TimeSpan.MaxValue);
 
-                });
+
+
+
+
 
             return services;
         }

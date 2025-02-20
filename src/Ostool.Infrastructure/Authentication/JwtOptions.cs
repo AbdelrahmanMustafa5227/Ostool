@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Ostool.Infrastructure.Authentication
 {
-    public class AuthOptions
+    public class JwtOptions
     {
-        public const string SectionName = "AuthOptions";
+        public const string SectionName = "JwtOptions";
 
         public string SecretKey { get; init; } = string.Empty;
         public string Issuer { get; init; } = string.Empty;
