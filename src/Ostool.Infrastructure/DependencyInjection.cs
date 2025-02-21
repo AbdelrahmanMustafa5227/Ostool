@@ -1,12 +1,9 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.BearerToken;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Ostool.Application.Abstractions.Authentication;
 using Ostool.Application.Abstractions.Repositories;
@@ -32,7 +29,7 @@ namespace Ostool.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            // Database and Persistance
+            #region Database and Persistance
             services.AddDbContext<AppDbContext>(cfg =>
             {
                 cfg.UseSqlServer(configuration.GetConnectionString("Default"));
@@ -44,15 +41,10 @@ namespace Ostool.Infrastructure
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            #endregion
 
 
-
-            // Authentication
-            services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
-            services.Configure<GoogleOAuthOptions>(configuration.GetSection(GoogleOAuthOptions.SectionName));
-            services.ConfigureOptions<JwtOptionsSetup>();
-            services.ConfigureOptions<GoogleOAuthOptionsSetup>();
-            services.AddScoped<IJwtTokenProvider, JwtTokenProvider>();
+            #region Authentication
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -61,20 +53,44 @@ namespace Ostool.Infrastructure
                 .AddCookie()
                 .AddJwtBearer("Bearer")
                 .AddOAuth("Google", _ => { });
+            services.AddOptionsWithValidateOnStart<JwtOptions>()
+                .Bind(configuration.GetSection(JwtOptions.SectionName))
+                .ValidateDataAnnotations();
+            services.Configure<GoogleOAuthOptions>(configuration.GetSection(GoogleOAuthOptions.SectionName));
+            services.ConfigureOptions<JwtOptionsSetup>();
+            services.ConfigureOptions<GoogleOAuthOptionsSetup>();
+            services.AddScoped<IJwtTokenProvider, JwtTokenProvider>();
+            #endregion
 
 
-            // Other Services
+            #region Authorization
+            services.AddAuthorization(p =>
+            {
+                p.AddPolicy("Google", pb =>
+                {
+                    pb.AddAuthenticationSchemes("Google");
+                    pb.RequireAuthenticatedUser();
+                    pb.RequireClaim("verified_email", "True");
+                    pb.RequireClaim(ClaimTypes.Email);
+                });
+
+                p.AddPolicy("Local", pb =>
+                {
+                    pb.AddAuthenticationSchemes("Bearer");
+                    pb.RequireAuthenticatedUser();
+                });
+            });
+            #endregion
+
+
+            #region Other Services
             services.AddScoped<IdempotencyService>();
-
+            #endregion
 
 
             //services.AddHostedService<TokenRefresherJob>();
             //services.AddTransient<RefreshTokenContext>();
             //configuration.GetValue<TimeSpan>("key" , TimeSpan.MaxValue);
-
-
-
-
 
 
             return services;

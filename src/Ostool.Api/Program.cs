@@ -24,29 +24,13 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddHttpContextAccessor();
 
+
 builder.Services.AddProblemDetails(cfg =>
 {
     cfg.CustomizeProblemDetails = context =>
     {
         context.ProblemDetails.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
     };
-});
-
-builder.Services.AddAuthorization(p =>
-{
-    p.AddPolicy("Google", pb =>
-    {
-        pb.AddAuthenticationSchemes("Google");
-        pb.RequireAuthenticatedUser();
-        pb.RequireClaim("verified_email", "True");
-        pb.RequireClaim(ClaimTypes.Email);
-    });
-
-    p.AddPolicy("Local", pb =>
-    {
-        pb.AddAuthenticationSchemes("Bearer");
-        pb.RequireAuthenticatedUser();
-    });
 });
 
 builder.Services.AddCors(cfg =>
