@@ -47,14 +47,14 @@ namespace Ostool.Api.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllVendors([FromQuery] int page)
         {
-            var result = await _mediator.Send(new GetAllVendorsCommand(page));
+            var result = await _mediator.Send(new GetAllVendorsQuery(page));
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
         }
 
         [HttpGet("GetById")]
         public async Task<IActionResult> GetVendorById([FromQuery] Guid id)
         {
-            var result = await _mediator.Send(new GetVendorByIdCommand(id));
+            var result = await _mediator.Send(new GetVendorByIdQuery(id));
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
         }
     }

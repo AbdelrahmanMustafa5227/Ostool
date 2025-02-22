@@ -9,22 +9,22 @@ using System.Threading.Tasks;
 
 namespace Ostool.Application.Features.Advertisements.GetAll
 {
-    public record GetAllAdsCommand(int pageNumber) : IRequest<Result<Paginated<AdvertisementResponse>>>, ICacheable
+    public record GetAllAdsQuery(int pageNumber) : IRequest<Result<Paginated<AdvertisementResponse>>>, ICacheable
     {
         public string CacheKey => $"AllAds:{pageNumber}";
 
         public int DurationInSeconds => 30;
     }
 
-    internal class GetAllAdsCommandHandler : IRequestHandler<GetAllAdsCommand, Result<Paginated<AdvertisementResponse>>>
+    internal class GetAllAdsQueryHandler : IRequestHandler<GetAllAdsQuery, Result<Paginated<AdvertisementResponse>>>
     {
         private readonly IAdvertisementRepository _advertisementRepository;
 
-        public GetAllAdsCommandHandler(IAdvertisementRepository advertisementRepository)
+        public GetAllAdsQueryHandler(IAdvertisementRepository advertisementRepository)
         {
             _advertisementRepository = advertisementRepository;
         }
-        public async Task<Result<Paginated<AdvertisementResponse>>> Handle(GetAllAdsCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Paginated<AdvertisementResponse>>> Handle(GetAllAdsQuery request, CancellationToken cancellationToken)
         {
             var ads = await _advertisementRepository.GetAll(request.pageNumber);
 
