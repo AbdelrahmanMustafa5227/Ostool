@@ -8,22 +8,22 @@ using System.Threading.Tasks;
 
 namespace Ostool.Application.Features.Vendors.GetById
 {
-    public record GetVendorByIdCommand(Guid Id) : IRequest<Result<GetVendorByIdResponse>>;
+    public record GetVendorByIdQuery(Guid Id) : IRequest<Result<GetVendorByIdResponse>>;
 
     public record GetVendorByIdResponse(Guid Id, string Name, string ContactNumber, string Email);
 
-    internal class GetVendorByIdCommandHandler : IRequestHandler<GetVendorByIdCommand, Result<GetVendorByIdResponse>>
+    internal class GetVendorByIdQueryHandler : IRequestHandler<GetVendorByIdQuery, Result<GetVendorByIdResponse>>
     {
         private readonly IVendorRepository _vendorRepository;
-        private readonly ITestableLogger<GetVendorByIdCommandHandler> _logger;
+        private readonly ITestableLogger<GetVendorByIdQueryHandler> _logger;
 
-        public GetVendorByIdCommandHandler(IVendorRepository vendorRepository, ITestableLogger<GetVendorByIdCommandHandler> logger)
+        public GetVendorByIdQueryHandler(IVendorRepository vendorRepository, ITestableLogger<GetVendorByIdQueryHandler> logger)
         {
             _vendorRepository = vendorRepository;
             _logger = logger;
         }
 
-        public async Task<Result<GetVendorByIdResponse>> Handle(GetVendorByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Result<GetVendorByIdResponse>> Handle(GetVendorByIdQuery request, CancellationToken cancellationToken)
         {
             var vendor = await _vendorRepository.GetById(request.Id);
             if (vendor == null)

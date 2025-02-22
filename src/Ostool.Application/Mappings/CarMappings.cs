@@ -24,9 +24,9 @@ namespace Ostool.Application.Mappings
             };
         }
 
-        public static GetByBrandResponse ToDto(this Car command)
+        public static GetCarByBrandResponse ToDto(this Car command)
         {
-            return new GetByBrandResponse(command.Brand, command.Model, command.AvgPrice);
+            return new GetCarByBrandResponse(command.Brand, command.Model, command.AvgPrice);
         }
 
         public static Car ToModel(this UpdateCarCommand command)

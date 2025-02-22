@@ -10,23 +10,23 @@ using System.Threading.Tasks;
 
 namespace Ostool.Application.Features.Advertisements.GetAllByModel
 {
-    public record GetAllAdsByModelCommand(string Model, int pageNumber) : IRequest<Result<Paginated<AdvertisementResponse>>>, ICacheable
+    public record GetAllAdsByModelQuery(string Model, int pageNumber) : IRequest<Result<Paginated<AdvertisementResponse>>>, ICacheable
     {
         public string CacheKey => $"Ads:{Model}:{pageNumber}";
 
         public int DurationInSeconds => 30;
     }
 
-    internal class GetAllAdsByModelCommandHandler : IRequestHandler<GetAllAdsByModelCommand, Result<Paginated<AdvertisementResponse>>>
+    internal class GetAllAdsByModelQueryHandler : IRequestHandler<GetAllAdsByModelQuery, Result<Paginated<AdvertisementResponse>>>
     {
         private readonly IAdvertisementRepository _advertisementRepository;
 
-        public GetAllAdsByModelCommandHandler(IAdvertisementRepository advertisementRepository)
+        public GetAllAdsByModelQueryHandler(IAdvertisementRepository advertisementRepository)
         {
             _advertisementRepository = advertisementRepository;
         }
 
-        public async Task<Result<Paginated<AdvertisementResponse>>> Handle(GetAllAdsByModelCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Paginated<AdvertisementResponse>>> Handle(GetAllAdsByModelQuery request, CancellationToken cancellationToken)
         {
             var allAdsByModel = await _advertisementRepository.GetAllByCarModel(request.Model, request.pageNumber);
 

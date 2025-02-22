@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace Ostool.Application.Features.Advertisements.GetById
 {
-    public record GetAdByIdCommand(Guid Id) : IRequest<Result<AdvertisementDetailedResponse>>;
+    public record GetAdByIdQuery(Guid Id) : IRequest<Result<AdvertisementDetailedResponse>>;
 
-    internal class GetAdByIdCommandHandler : IRequestHandler<GetAdByIdCommand, Result<AdvertisementDetailedResponse>>
+    internal class GetAdByIdQueryHandler : IRequestHandler<GetAdByIdQuery, Result<AdvertisementDetailedResponse>>
     {
         private readonly IAdvertisementRepository _advertisementRepository;
 
-        public GetAdByIdCommandHandler(IAdvertisementRepository advertisementRepository)
+        public GetAdByIdQueryHandler(IAdvertisementRepository advertisementRepository)
         {
             _advertisementRepository = advertisementRepository;
         }
 
-        public async Task<Result<AdvertisementDetailedResponse>> Handle(GetAdByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Result<AdvertisementDetailedResponse>> Handle(GetAdByIdQuery request, CancellationToken cancellationToken)
         {
             var ad = await _advertisementRepository.GetById(request.Id);
 

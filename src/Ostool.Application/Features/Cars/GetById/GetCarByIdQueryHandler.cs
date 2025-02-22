@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace Ostool.Application.Features.Cars.GetById
 {
-    public record GetCarByIdCommand(Guid Id) : IRequest<Result<GetCarByIdResponse>>;
+    public record GetCarByIdQuery(Guid Id) : IRequest<Result<GetCarByIdResponse>>;
 
     public record GetCarByIdResponse(Guid Id, string Brand, string Model, decimal AvgPrice);
 
-    internal class GetCarByIdCommandHandler : IRequestHandler<GetCarByIdCommand, Result<GetCarByIdResponse>>
+    internal class GetCarByIdQueryHandler : IRequestHandler<GetCarByIdQuery, Result<GetCarByIdResponse>>
     {
         private readonly ICarRepository _carRepository;
 
-        public GetCarByIdCommandHandler(ICarRepository carRepository)
+        public GetCarByIdQueryHandler(ICarRepository carRepository)
         {
             _carRepository = carRepository;
         }
-        public async Task<Result<GetCarByIdResponse>> Handle(GetCarByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Result<GetCarByIdResponse>> Handle(GetCarByIdQuery request, CancellationToken cancellationToken)
         {
             var car = await _carRepository.GetById(request.Id);
 

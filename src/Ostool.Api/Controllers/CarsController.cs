@@ -50,7 +50,7 @@ namespace Ostool.Api.Controllers
         [HttpGet("GetByBrand")]
         public async Task<IActionResult> GetByBrand([FromQuery] string brandName, int page)
         {
-            var result = await _mediator.Send(new GetByBrandCommand(brandName, page));
+            var result = await _mediator.Send(new GetCarByBrandQuery(brandName, page));
 
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
         }
@@ -58,7 +58,7 @@ namespace Ostool.Api.Controllers
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById([FromQuery] Guid id)
         {
-            var result = await _mediator.Send(new GetCarByIdCommand(id));
+            var result = await _mediator.Send(new GetCarByIdQuery(id));
 
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
         }

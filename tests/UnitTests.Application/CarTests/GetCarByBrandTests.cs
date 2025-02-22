@@ -19,25 +19,25 @@ namespace Ostool.UnitTests.CarTests
     public class GetCarByBrandTests
     {
         private readonly ICarRepository _carRepository = Substitute.For<ICarRepository>();
-        private readonly ITestableLogger<GetByBrandCommandHandler> _logger = Substitute.For<ITestableLogger<GetByBrandCommandHandler>>();
-        private readonly GetByBrandCommandHandler _handler;
+        private readonly ITestableLogger<GetCarByBrandQueryHandler> _logger = Substitute.For<ITestableLogger<GetCarByBrandQueryHandler>>();
+        private readonly GetCarByBrandQueryHandler _handler;
 
         public GetCarByBrandTests()
         {
-            _handler = new GetByBrandCommandHandler(_carRepository, _logger);
+            _handler = new GetCarByBrandQueryHandler(_carRepository, _logger);
         }
 
         [Fact]
         public async Task NoCarHasThisBrand_ShouldReturnEmptyList()
         {
             // Arrange
-            var command = new GetByBrandCommand("Brand", 1);
+            var command = new GetCarByBrandQuery("Brand", 1);
             _carRepository.GetAllByBrand(command.Brand, command.pageNumber).Returns(new QueryResult<Car>(new List<Car>()));
             // Act
             var result = await _handler.Handle(command, default);
             // Assert
             Assert.True(result.IsSuccess);
-            Assert.Equal(result.Value.Items, new List<GetByBrandResponse>());
+            Assert.Equal(result.Value.Items, new List<GetCarByBrandResponse>());
             _logger.Received(0).LogError(Arg.Any<string>());
         }
 
@@ -45,7 +45,7 @@ namespace Ostool.UnitTests.CarTests
         public async Task SomeCarsHasThisBrand_ShouldReturnList()
         {
             // Arrange
-            var command = new GetByBrandCommand("Brand", 1);
+            var command = new GetCarByBrandQuery("Brand", 1);
             var cars = new QueryResult<Car>(new List<Car>());
             _carRepository.GetAllByBrand(command.Brand, 1).Returns(cars);
             // Act
