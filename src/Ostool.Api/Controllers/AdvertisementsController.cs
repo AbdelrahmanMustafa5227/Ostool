@@ -7,6 +7,7 @@ using Ostool.Application.Features.Advertisements.GetAllByModel;
 using Ostool.Application.Features.Advertisements.GetAllByVendor;
 using Ostool.Application.Features.Advertisements.GetById;
 using Ostool.Application.Features.Advertisements.PostAd;
+using Ostool.Infrastructure.Services;
 
 namespace Ostool.Api.Controllers
 {
@@ -15,10 +16,12 @@ namespace Ostool.Api.Controllers
     public class AdvertisementsController : ApiController
     {
         private readonly ISender _mediator;
+        private readonly EmailService _emailService;
 
-        public AdvertisementsController(ISender mediator)
+        public AdvertisementsController(ISender mediator, EmailService emailService)
         {
             _mediator = mediator;
+            _emailService = emailService;
         }
 
         [HttpPost("Add")]
@@ -56,5 +59,13 @@ namespace Ostool.Api.Controllers
             var result = await _mediator.Send(new GetAdByIdQuery(id));
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
         }
+
+        /*[HttpGet("email")]
+        public async Task<IActionResult> Asdd()
+        {
+            await Task.CompletedTask;
+            _emailService.Send();
+            return Ok();
+        }*/
     }
 }

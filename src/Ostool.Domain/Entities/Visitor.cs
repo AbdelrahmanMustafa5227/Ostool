@@ -10,5 +10,7 @@ namespace Ostool.Domain.Entities
     public class Visitor : AppUser, IEntity
     {
         public bool SubscribedToNewsletter { get; set; }
+
+        public ICollection<Favourites> SavedAds { get; set; } = new List<Favourites>();
     }
 }

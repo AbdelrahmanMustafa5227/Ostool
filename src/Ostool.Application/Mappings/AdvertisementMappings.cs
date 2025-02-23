@@ -1,4 +1,5 @@
 ﻿using Ostool.Application.Features.Advertisements.PostAd;
+using Ostool.Application.Features.Advertisements.Responses;
 using Ostool.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -24,5 +25,20 @@ namespace Ostool.Application.Mappings
                 PostedDate = DateTime.Now
             };
         }
+
+        /*public static AdvertisementResponse ToDto(this Advertisement postAdCommand)
+        {
+            return new AdvertisementResponse
+            {
+                Id = Guid.NewGuid(),
+                CarId = postAdCommand.mode,
+                VendorId = postAdCommand.VendorId,
+                Description = postAdCommand.Description,
+                ExpirationDate = postAdCommand.ExpirationDate,
+                Price = postAdCommand.Price,
+                Year = postAdCommand.Year,
+                PostedDate = DateTime.Now
+            };
+        }*/
     }
 }

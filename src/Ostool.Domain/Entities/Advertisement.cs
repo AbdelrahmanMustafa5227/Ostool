@@ -21,5 +21,7 @@ namespace Ostool.Domain.Entities
 
         public Car Car { get; set; } = null!;
         public Guid CarId { get; set; }
+
+        public ICollection<Favourites> Favorites { get; set; } = new List<Favourites>();
     }
 }

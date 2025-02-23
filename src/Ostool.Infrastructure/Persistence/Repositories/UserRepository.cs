@@ -39,6 +39,11 @@ namespace Ostool.Infrastructure.Persistence.Repositories
             return await _appDbContext.Visitors.AnyAsync(x => x.Email == email);
         }
 
+        public async Task<bool> VisitorExists(Guid visitorId)
+        {
+            return await _appDbContext.Visitors.AnyAsync(x => x.Id == visitorId);
+        }
+
         public void Register(Visitor user)
         {
             _appDbContext.Visitors.Add(user);

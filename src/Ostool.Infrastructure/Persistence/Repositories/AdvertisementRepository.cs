@@ -86,14 +86,14 @@ namespace Ostool.Infrastructure.Persistence.Repositories
                 """
                 WITH cte AS
                 (
-                    SELECT a.Id, c.Id AS CarID , c.Brand , c.Model , v.Name , v.ContactNumber , v.Email , a.Description , a.Price , a.Year , a.PostedDate
+                    SELECT a.Id, c.Id AS CarID , c.Brand , c.Model , v.VendorName , v.ContactNumber , v.Email , a.Description , a.Price , a.Year , a.PostedDate
                     FROM Advertisements a 
                     INNER JOIN Cars c ON a.CarId = c.Id
                     INNER JOIN Vendors v ON a.VendorId = v.Id
                     WHERE a.Id = @id
                 )
                 SELECT cte.Id , cte.Model, cte.Brand ,sp.BodyStyle , sp.GroundClearance, sp.EngineType , sp.Displacement , sp.Horsepower , sp.NumberOfCylinders,
-                	sp.TransmissionType , sp.NumberOfGears , sp.TopSpeed , sp.ZeroToSixty , sp.HasSunRoof , sp.SeatingCapacity , cte.Name AS VendorName , cte.ContactNumber,
+                	sp.TransmissionType , sp.NumberOfGears , sp.TopSpeed , sp.ZeroToSixty , sp.HasSunRoof , sp.SeatingCapacity , cte.VendorName , cte.ContactNumber,
                 	cte.Email , cte.Description , cte.Price , cte.Year , cte.PostedDate
                 FROM cte
                 Inner Join CarSpecs sp ON cte.CarID = sp.CarId

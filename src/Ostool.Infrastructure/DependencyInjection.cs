@@ -12,6 +12,7 @@ using Ostool.Infrastructure.Authentication;
 using Ostool.Infrastructure.Idempotency;
 using Ostool.Infrastructure.Persistence;
 using Ostool.Infrastructure.Persistence.Repositories;
+using Ostool.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,7 @@ namespace Ostool.Infrastructure
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IFavouritesRepository, FavouritesRepository>();
             #endregion
 
 
@@ -85,6 +87,7 @@ namespace Ostool.Infrastructure
 
             #region Other Services
             services.AddScoped<IdempotencyService>();
+            services.AddScoped<EmailService>();
             #endregion
 
 

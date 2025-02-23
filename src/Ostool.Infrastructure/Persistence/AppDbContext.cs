@@ -24,6 +24,8 @@ namespace Ostool.Infrastructure.Persistence
         public DbSet<Car> Cars => Set<Car>();
         public DbSet<CarSpecs> CarSpecs => Set<CarSpecs>();
         public DbSet<Advertisement> Advertisements => Set<Advertisement>();
+        public DbSet<Favourites> Favourites => Set<Favourites>();
+
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

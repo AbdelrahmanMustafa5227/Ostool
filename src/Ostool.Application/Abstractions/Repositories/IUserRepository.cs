@@ -13,6 +13,7 @@ namespace Ostool.Application.Abstractions.Repositories
         Task<bool> IsEmailUsed(string email);
         Task<bool> IsVendor(string email);
         Task<bool> IsVisitor(string email);
+        Task<bool> VisitorExists(Guid visitorId);
         void Register(Visitor user);
         void Register(Vendor user);
     }
