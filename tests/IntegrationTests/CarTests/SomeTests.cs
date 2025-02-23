@@ -32,7 +32,7 @@ namespace Ostool.IntegrationTests.CarTests
             var brandName = "This Brand Doesn't Exist";
             // Act
             var response = await _httpClient.GetAsync($"cars/GetByBrand?brandName={brandName}&page=1");
-            var deserializedContent = await response.Content.ReadFromJsonAsync<Paginated<GetByBrandResponse>>();
+            var deserializedContent = await response.Content.ReadFromJsonAsync<Paginated<GetCarByBrandResponse>>();
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal([], deserializedContent!.Items);
