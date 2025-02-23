@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ostool.Application.Features.Visitors.SaveAdvertisement
 {
-    public record SaveAdvertisementCommand(Guid VisitorId , Guid AdId) : IRequest<Result>;
+    public record SaveAdvertisementCommand(Guid VisitorId, Guid AdId) : IRequest<Result>;
 
     internal class SaveAdvertisementCommandHandler : IRequestHandler<SaveAdvertisementCommand, Result>
     {
@@ -27,21 +27,21 @@ namespace Ostool.Application.Features.Visitors.SaveAdvertisement
 
         public async Task<Result> Handle(SaveAdvertisementCommand request, CancellationToken cancellationToken)
         {
-            if(await _advertisementRepository.GetById(request.AdId) is null)
+            if (await _advertisementRepository.GetById(request.AdId) is null)
             {
                 return Result.Failure(Error.NotFound);
             }
 
-            if(!await _userRepository.VisitorExists(request.VisitorId))
+            if (!await _userRepository.VisitorExists(request.VisitorId))
             {
                 return Result.Failure(Error.NotFound);
             }
 
-            var favourites = new Favourites() 
-            { 
+            var favourites = new Favourites()
+            {
                 Id = Guid.NewGuid(),
                 VisitorId = request.VisitorId,
-                AdvertisementId = request.AdId 
+                AdvertisementId = request.AdId
             };
 
             _favouritesRepository.Add(favourites);

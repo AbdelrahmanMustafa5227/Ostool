@@ -13,11 +13,11 @@ namespace Ostool.Infrastructure.Services
     {
         public EmailService()
         {
-            
+
         }
 
 
-        public void Send(string Subject , string To)
+        public void Send(string Subject, string To)
         {
             var message = new MimeMessage();
             message.From.Add(MailboxAddress.Parse("sulabeexsulabee@gmail.com"));

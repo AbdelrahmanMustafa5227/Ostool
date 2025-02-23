@@ -23,7 +23,7 @@ namespace Ostool.Application.Features.Visitors.UnsaveAdvertisement
         {
             var ad = await _favouritesRepository.GetById(request.Id);
 
-            if(ad is null)
+            if (ad is null)
                 return Result.Failure(Error.NotFound);
 
             _favouritesRepository.Delete(ad);

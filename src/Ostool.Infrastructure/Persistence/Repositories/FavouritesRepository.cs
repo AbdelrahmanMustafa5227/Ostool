@@ -29,7 +29,7 @@ namespace Ostool.Infrastructure.Persistence.Repositories
             _appDbContext.Favourites.Remove(favourites);
         }
 
-        public async Task<Favourites?> GetById (Guid id)
+        public async Task<Favourites?> GetById(Guid id)
         {
             return await _appDbContext.Favourites.FirstOrDefaultAsync(x => x.Id == id);
         }
