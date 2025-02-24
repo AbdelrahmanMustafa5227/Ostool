@@ -32,7 +32,7 @@ namespace Ostool.Application.Features.Auth.GoogleRegister
                     Email = request.Email,
                     UserName = request.Name,
                     Id = request.Id,
-                    SubscribedToNewsletter = false,
+                    SubscribedToEmails = false,
                     AuthProvider = AuthProvider.Google
                 };
 

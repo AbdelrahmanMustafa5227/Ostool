@@ -4,15 +4,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Ostool.Application.Abstractions.Authentication;
 using Ostool.Application.Abstractions.Repositories;
+using Ostool.Application.Abstractions.Services;
 using Ostool.Domain.Entities;
 using Ostool.Infrastructure.Authentication;
+using Ostool.Infrastructure.BackgroundJobs;
 using Ostool.Infrastructure.Idempotency;
 using Ostool.Infrastructure.Persistence;
 using Ostool.Infrastructure.Persistence.Repositories;
-using Ostool.Infrastructure.Services;
+using Ostool.Infrastructure.Services.Email;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +46,8 @@ namespace Ostool.Infrastructure
             services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IFavouritesRepository, FavouritesRepository>();
+            services.AddScoped<IWatchlistRepository, WatchlistRepository>();
+            services.AddScoped<IOutboxRepository, OutboxRepository>();
             #endregion
 
 
@@ -87,7 +92,9 @@ namespace Ostool.Infrastructure
 
             #region Other Services
             services.AddScoped<IdempotencyService>();
-            services.AddScoped<EmailService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.Configure<EmailOptions>(configuration.GetSection(EmailOptions.SectionName));
+            services.AddHostedService<OutboxJob>();
             #endregion
 
 

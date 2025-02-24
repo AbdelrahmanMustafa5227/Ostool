@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -14,18 +15,20 @@ namespace Ostool.Infrastructure.Authentication
     internal class GoogleOAuthOptionsSetup : IConfigureNamedOptions<OAuthOptions>
     {
         private readonly GoogleOAuthOptions _options;
+        private readonly IConfiguration _configuration;
 
-        public GoogleOAuthOptionsSetup(IOptions<GoogleOAuthOptions> options)
+        public GoogleOAuthOptionsSetup(IOptions<GoogleOAuthOptions> options, IConfiguration configuration)
         {
             _options = options.Value;
+            _configuration = configuration;
         }
 
         public void Configure(OAuthOptions options)
         {
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
-            options.ClientId = _options.ClientId;
-            options.ClientSecret = _options.ClientSecret;
+            options.ClientId = _configuration["Ostool_Google_ClientId"]!;
+            options.ClientSecret = _configuration["Ostool_Google_ClientSecret"]!;
             options.CallbackPath = _options.CallbackPath;
 
             options.AuthorizationEndpoint = _options.AuthorizationEndpoint;

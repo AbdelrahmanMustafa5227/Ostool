@@ -23,7 +23,6 @@ namespace Ostool.Infrastructure.Persistence.Repositories
         }
         public void Add(Advertisement advertisement)
         {
-
             _appDbContext.Advertisements.Add(advertisement);
         }
 

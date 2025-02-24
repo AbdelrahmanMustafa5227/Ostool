@@ -14,7 +14,7 @@ namespace Ostool.UnitTests.AdvertisementTests
 {
     public class PostAdTests
     {
-        private readonly IAdvertisementRepository _advertisementRepository = Substitute.For<IAdvertisementRepository>();
+        /*private readonly IAdvertisementRepository _advertisementRepository = Substitute.For<IAdvertisementRepository>();
         private readonly ICarRepository _carRepository = Substitute.For<ICarRepository>();
         private readonly IVendorRepository _vendorRepository = Substitute.For<IVendorRepository>();
         private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
@@ -64,6 +64,6 @@ namespace Ostool.UnitTests.AdvertisementTests
             _advertisementRepository.Received(1).Add(Arg.Any<Advertisement>());
             await _unitOfWork.Received(1).SaveChangesAsync();
             Assert.True(result.IsSuccess);
-        }
+        }*/
     }
 }

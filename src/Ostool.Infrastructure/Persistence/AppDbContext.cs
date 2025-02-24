@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Ostool.Application.Abstractions.Repositories;
+using Ostool.Application.Outbox;
 using Ostool.Domain.Entities;
 using Ostool.Infrastructure.Authentication;
 using System;
@@ -25,7 +26,9 @@ namespace Ostool.Infrastructure.Persistence
         public DbSet<CarSpecs> CarSpecs => Set<CarSpecs>();
         public DbSet<Advertisement> Advertisements => Set<Advertisement>();
         public DbSet<Favourites> Favourites => Set<Favourites>();
+        public DbSet<WatchList> WatchList => Set<WatchList>();
 
+        public DbSet<OutboxMessage> outboxMessages => Set<OutboxMessage>();
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

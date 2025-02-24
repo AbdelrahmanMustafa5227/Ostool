@@ -9,8 +9,9 @@ namespace Ostool.Domain.Entities
 {
     public class Visitor : AppUser, IEntity
     {
-        public bool SubscribedToNewsletter { get; set; }
+        public bool SubscribedToEmails { get; set; }
 
         public ICollection<Favourites> SavedAds { get; set; } = new List<Favourites>();
+        public ICollection<WatchList> WatchList { get; set; } = new HashSet<WatchList>();
     }
 }

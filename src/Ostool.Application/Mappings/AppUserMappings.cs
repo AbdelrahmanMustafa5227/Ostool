@@ -23,7 +23,7 @@ namespace Ostool.Application.Mappings
                     UserName = command.UserName,
                     Password = command.Password,
                     Id = Guid.NewGuid(),
-                    SubscribedToNewsletter = false,
+                    SubscribedToEmails = false,
                     AuthProvider = AuthProvider.Local
                 };
             }

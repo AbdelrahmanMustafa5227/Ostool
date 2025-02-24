@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Ostool.Application.Features.Visitors.AddToWatchlist;
 using Ostool.Application.Features.Visitors.GetSavedAds;
 using Ostool.Application.Features.Visitors.SaveAdvertisement;
 using Ostool.Application.Features.Visitors.UnsaveAdvertisement;
@@ -37,6 +38,13 @@ namespace Ostool.Api.Controllers
         {
             var result = await _mediatr.Send(query);
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
+        }
+
+        [HttpPost("addToWatchlist")]
+        public async Task<IActionResult> AddToWatchlist([FromBody] AddToWatchlistCommand command)
+        {
+            var result = await _mediatr.Send(command);
+            return result.IsSuccess ? Ok() : Problem(result.Error!);
         }
     }
 }

@@ -1,33 +1,23 @@
-﻿using MailKit.Net.Smtp;
-using MimeKit;
-using MimeKit.Text;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ostool.Infrastructure.Services
+namespace Ostool.Application.EmailTemplates
 {
-    public class EmailService
+    internal static class AdNotificationEmailTemplate
     {
-        public EmailService()
+        public static string Get(string carName, string vendorName, decimal price)
         {
-
+            return template
+                .Replace("{{CarName}}", carName)
+                .Replace("{{VendorName}}", vendorName)
+                .Replace("{{Price}}", price.ToString());
         }
 
-
-        public void Send(string Subject, string To)
-        {
-            var message = new MimeMessage();
-            message.From.Add(MailboxAddress.Parse("sulabeexsulabee@gmail.com"));
-            message.To.Add(MailboxAddress.Parse(To));
-            message.Subject = Subject;
-
-            message.Body = new TextPart(TextFormat.Html)
-            {
-                Text = """  
-                        <!DOCTYPE html>
+        private const string template = """  
+                <!DOCTYPE html>
                 <html>
                 <head>
                     <meta charset="UTF-8">
@@ -82,29 +72,19 @@ namespace Ostool.Infrastructure.Services
                 <body>
                     <div class="container">
                         <div class="header">
-                            <h2>Welcome to Our Service</h2>
+                            <h2>Check Out This new Offer !</h2>
                         </div>
                         <div class="content">
-                            <p>Hello <strong>{{Name}}</strong>,</p>
-                            <p>Thank you for signing up! Click the button below to verify your email:</p>
-                            <a href="{{VerificationLink}}" class="button">Verify Email</a>
+                            <h3>{{CarName}}</h3>
+                            <h4>Is listed by {{VendorName}} at price of {{Price}}$</h4>
                         </div>
                         <div class="footer">
-                            <p>If you didn't sign up, please ignore this email.</p>
-                            <p>&copy; 2025 Your Company. All rights reserved.</p>
+                            <p>&copy; 2025 Ostool. All rights reserved.</p>
                         </div>
                     </div>
                 </body>
                 </html>
                 
-                """
-            };
-
-            using var client = new SmtpClient();
-            client.Connect("smtp.gmail.com", 465, true);
-            client.Authenticate("sulabeexsulabee@gmail.com", "dbms uehb qpbv vvvu");
-            client.Send(message);
-            client.Disconnect(true);
-        }
+                """;
     }
 }

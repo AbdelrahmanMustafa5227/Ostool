@@ -16,12 +16,10 @@ namespace Ostool.Api.Controllers
     public class AdvertisementsController : ApiController
     {
         private readonly ISender _mediator;
-        private readonly EmailService _emailService;
 
-        public AdvertisementsController(ISender mediator, EmailService emailService)
+        public AdvertisementsController(ISender mediator)
         {
             _mediator = mediator;
-            _emailService = emailService;
         }
 
         [HttpPost("Add")]
@@ -60,12 +58,5 @@ namespace Ostool.Api.Controllers
             return result.IsSuccess ? Ok(result.Value) : Problem(result.Error!);
         }
 
-        /*[HttpGet("email")]
-        public async Task<IActionResult> Asdd()
-        {
-            await Task.CompletedTask;
-            _emailService.Send();
-            return Ok();
-        }*/
     }
 }

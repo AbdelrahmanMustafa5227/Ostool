@@ -16,5 +16,6 @@ namespace Ostool.Domain.Entities
 
         public CarSpecs carSpecs { get; set; } = null!;
         public ICollection<Advertisement> advertisements { get; set; } = new List<Advertisement>();
+        public ICollection<WatchList> InterestedUsers { get; set; } = new HashSet<WatchList>();
     }
 }
