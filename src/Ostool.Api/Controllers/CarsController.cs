@@ -22,7 +22,7 @@ namespace Ostool.Api.Controllers
         }
 
         [HttpPost("Add")]
-        [Idempotent]
+        [ServiceFilter<Idempotent>]
         public async Task<IActionResult> AddCar(AddCarCommand command)
         {
             var result = await _mediator.Send(command);
@@ -31,7 +31,7 @@ namespace Ostool.Api.Controllers
         }
 
         [HttpPost("AddList")]
-        [Idempotent]
+        [ServiceFilter<Idempotent>]
         public async Task<IActionResult> AddListOfCar(List<AddCarCommand> cars)
         {
             var result = await _mediator.Send(new AddListOfCarsCommand(cars));
@@ -64,7 +64,7 @@ namespace Ostool.Api.Controllers
         }
 
         [HttpDelete("Delete")]
-        [Idempotent]
+        [ServiceFilter<Idempotent>]
         public async Task<IActionResult> Delete([FromQuery] Guid carId)
         {
             var result = await _mediator.Send(new DeleteCarCommand(carId));

@@ -23,7 +23,7 @@ namespace Ostool.Api.Controllers
         }
 
         [HttpPost("Add")]
-        [Idempotent]
+        [ServiceFilter<Idempotent>]
         public async Task<IActionResult> AddAd([FromBody] PostAdCommand command)
         {
             var result = await _mediator.Send(command);

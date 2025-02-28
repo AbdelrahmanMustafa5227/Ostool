@@ -5,13 +5,16 @@ using System.Net;
 
 namespace Ostool.Api.Filters
 {
-    public class Idempotent : Attribute, IAsyncActionFilter
+    public class Idempotent : IAsyncActionFilter
     {
+        private readonly IdempotencyService idempotencyService;
 
+        public Idempotent(IdempotencyService service)
+        {
+            idempotencyService = service;
+        }
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var idempotencyService = context.HttpContext.RequestServices.GetRequiredService<IdempotencyService>();
-
             if (!context.HttpContext.Request.Headers.TryGetValue("X-Idempotency", out var idempotencyKey))
             {
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;

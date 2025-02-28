@@ -22,7 +22,7 @@ namespace Ostool.Api.Controllers
         }
 
         [HttpPost("Add")]
-        [Idempotent]
+        [ServiceFilter<Idempotent>]
         public async Task<IActionResult> AddVendor(AddVendorCommand command)
         {
             var result = await _mediator.Send(command);
@@ -30,7 +30,7 @@ namespace Ostool.Api.Controllers
         }
 
         [HttpDelete("Delete")]
-        [Idempotent]
+        [ServiceFilter<Idempotent>]
         public async Task<IActionResult> DeleteVendor(DeleteVendorCommand command)
         {
             var result = await _mediator.Send(command);

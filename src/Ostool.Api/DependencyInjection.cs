@@ -1,4 +1,5 @@
-﻿using Ostool.Api.Helper;
+﻿using Ostool.Api.Filters;
+using Ostool.Api.Helper;
 using Ostool.Application.Abstractions;
 
 namespace Ostool.Api
@@ -12,6 +13,8 @@ namespace Ostool.Api
             services.AddScoped<IUserContext, UserContext>();
             services.AddHttpContextAccessor();
 
+            // Service Filters
+            services.AddScoped<Idempotent>();
 
             services.AddProblemDetails(cfg =>
             {
